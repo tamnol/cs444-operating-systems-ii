@@ -1,0 +1,267 @@
+* Steps to use ACLs to Share Access to Git Repositories
+
+** Display Script Usage Instructions
+
+#+BEGIN_SRC shell
+os2 ~/cs444 152% bash /scratch/bin/acl_open                                                                            
+USAGE: /scratch/bin/acl_open [-r] [-g] directory [user|group]
+
+  -r   read-only (default is read/write)
+  -g   supplied value is a group instead of user
+#+END_SRC
+
+** Display Initial Permissions of ~/scratch/fall2017/37~
+
+#+BEGIN_SRC shell
+os2 /scratch/fall2017 166% getfacl 37
+# file: 37
+# owner: browtayl
+# group: upg55341
+user::rwx
+group::rwx
+other::---
+
+#+END_SRC
+
+** Add Permissions
+
+#+BEGIN_SRC shell
+os2 /scratch/fall2017 167% bash /scratch/bin/acl_open 37 tamnol
+This script is ready to enable read/write access for user tamnol
+to the following directory and all of its contents:
+
+    /scratch/fall2017/37
+
+Hit Enter to continue or Ctrl-C to abort.
+
+Working..setfacl: ./linux-yocto-3.19-old: Operation not permitted
+find: ‘./linux-yocto-3.19-old/.git’: Permission denied
+find: ‘./linux-yocto-3.19-old/Documentation’: Permission denied
+find: ‘./linux-yocto-3.19-old/arch’: Permission denied
+find: ‘./linux-yocto-3.19-old/block’: Permission denied
+find: ‘./linux-yocto-3.19-old/crypto’: Permission denied
+find: ‘./linux-yocto-3.19-old/drivers’: Permission denied
+find: ‘./linux-yocto-3.19-old/firmware’: Permission denied
+find: ‘./linux-yocto-3.19-old/fs’: Permission denied
+find: ‘./linux-yocto-3.19-old/include’: Permission denied
+find: ‘./linux-yocto-3.19-old/init’: Permission denied
+find: ‘./linux-yocto-3.19-old/ipc’: Permission denied
+find: ‘./linux-yocto-3.19-old/kernel’: Permission denied
+find: ‘./linux-yocto-3.19-old/lib’: Permission denied
+find: ‘./linux-yocto-3.19-old/mm’: Permission denied
+find: ‘./linux-yocto-3.19-old/net’: Permission denied
+find: ‘./linux-yocto-3.19-old/samples’: Permission denied
+find: ‘./linux-yocto-3.19-old/scripts’: Permission denied
+find: ‘./linux-yocto-3.19-old/security’: Permission denied
+find: ‘./linux-yocto-3.19-old/sound’: Permission denied
+find: ‘./linux-yocto-3.19-old/tools’: Permission denied
+find: ‘./linux-yocto-3.19-old/usr’: Permission denied
+find: ‘./linux-yocto-3.19-old/virt’: Permission denied
+.setfacl: ./linux-yocto-3.19-old: Operation not permitted
+find: ‘./linux-yocto-3.19-old/.git’: Permission denied
+find: ‘./linux-yocto-3.19-old/Documentation’: Permission denied
+find: ‘./linux-yocto-3.19-old/arch’: Permission denied
+find: ‘./linux-yocto-3.19-old/block’: Permission denied
+find: ‘./linux-yocto-3.19-old/crypto’: Permission denied
+find: ‘./linux-yocto-3.19-old/drivers’: Permission denied
+find: ‘./linux-yocto-3.19-old/firmware’: Permission denied
+find: ‘./linux-yocto-3.19-old/fs’: Permission denied
+find: ‘./linux-yocto-3.19-old/include’: Permission denied
+find: ‘./linux-yocto-3.19-old/init’: Permission denied
+find: ‘./linux-yocto-3.19-old/ipc’: Permission denied
+find: ‘./linux-yocto-3.19-old/kernel’: Permission denied
+find: ‘./linux-yocto-3.19-old/lib’: Permission denied
+find: ‘./linux-yocto-3.19-old/mm’: Permission denied
+find: ‘./linux-yocto-3.19-old/net’: Permission denied
+find: ‘./linux-yocto-3.19-old/samples’: Permission denied
+find: ‘./linux-yocto-3.19-old/scripts’: Permission denied
+find: ‘./linux-yocto-3.19-old/security’: Permission denied
+find: ‘./linux-yocto-3.19-old/sound’: Permission denied
+find: ‘./linux-yocto-3.19-old/tools’: Permission denied
+find: ‘./linux-yocto-3.19-old/usr’: Permission denied
+find: ‘./linux-yocto-3.19-old/virt’: Permission denied
+.find: ‘./linux-yocto-3.19-old/.git’: Permission denied
+find: ‘./linux-yocto-3.19-old/Documentation’: Permission denied
+find: ‘./linux-yocto-3.19-old/arch’: Permission denied
+find: ‘./linux-yocto-3.19-old/block’: Permission denied
+find: ‘./linux-yocto-3.19-old/crypto’: Permission denied
+find: ‘./linux-yocto-3.19-old/drivers’: Permission denied
+find: ‘./linux-yocto-3.19-old/firmware’: Permission denied
+find: ‘./linux-yocto-3.19-old/fs’: Permission denied
+find: ‘./linux-yocto-3.19-old/include’: Permission denied
+find: ‘./linux-yocto-3.19-old/init’: Permission denied
+find: ‘./linux-yocto-3.19-old/ipc’: Permission denied
+find: ‘./linux-yocto-3.19-old/kernel’: Permission denied
+find: ‘./linux-yocto-3.19-old/lib’: Permission denied
+find: ‘./linux-yocto-3.19-old/mm’: Permission denied
+find: ‘./linux-yocto-3.19-old/net’: Permission denied
+find: ‘./linux-yocto-3.19-old/samples’: Permission denied
+find: ‘./linux-yocto-3.19-old/scripts’: Permission denied
+find: ‘./linux-yocto-3.19-old/security’: Permission denied
+find: ‘./linux-yocto-3.19-old/sound’: Permission denied
+find: ‘./linux-yocto-3.19-old/tools’: Permission denied
+find: ‘./linux-yocto-3.19-old/usr’: Permission denied
+find: ‘./linux-yocto-3.19-old/virt’: Permission denied
+find: ‘./linux-yocto-3.19-old/.mailmap’: Permission denied
+find: ‘./linux-yocto-3.19-old/COPYING’: Permission denied
+find: ‘./linux-yocto-3.19-old/CREDITS’: Permission denied
+find: ‘./linux-yocto-3.19-old/Kbuild’: Permission denied
+find: ‘./linux-yocto-3.19-old/Kconfig’: Permission denied
+find: ‘./linux-yocto-3.19-old/MAINTAINERS’: Permission denied
+find: ‘./linux-yocto-3.19-old/README’: Permission denied
+find: ‘./linux-yocto-3.19-old/REPORTING-BUGS’: Permission denied
+find: ‘./linux-yocto-3.19-old/.gitignore’: Permission denied
+find: ‘./linux-yocto-3.19-old/Makefile’: Permission denied
+.find: ‘./linux-yocto-3.19-old/.git’: Permission denied
+find: ‘./linux-yocto-3.19-old/Documentation’: Permission denied
+find: ‘./linux-yocto-3.19-old/arch’: Permission denied
+find: ‘./linux-yocto-3.19-old/block’: Permission denied
+find: ‘./linux-yocto-3.19-old/crypto’: Permission denied
+find: ‘./linux-yocto-3.19-old/drivers’: Permission denied
+find: ‘./linux-yocto-3.19-old/firmware’: Permission denied
+find: ‘./linux-yocto-3.19-old/fs’: Permission denied
+find: ‘./linux-yocto-3.19-old/include’: Permission denied
+find: ‘./linux-yocto-3.19-old/init’: Permission denied
+find: ‘./linux-yocto-3.19-old/ipc’: Permission denied
+find: ‘./linux-yocto-3.19-old/kernel’: Permission denied
+find: ‘./linux-yocto-3.19-old/lib’: Permission denied
+find: ‘./linux-yocto-3.19-old/mm’: Permission denied
+find: ‘./linux-yocto-3.19-old/net’: Permission denied
+find: ‘./linux-yocto-3.19-old/samples’: Permission denied
+find: ‘./linux-yocto-3.19-old/scripts’: Permission denied
+find: ‘./linux-yocto-3.19-old/security’: Permission denied
+find: ‘./linux-yocto-3.19-old/sound’: Permission denied
+find: ‘./linux-yocto-3.19-old/tools’: Permission denied
+find: ‘./linux-yocto-3.19-old/usr’: Permission denied
+find: ‘./linux-yocto-3.19-old/virt’: Permission denied
+find: ‘./linux-yocto-3.19-old/.mailmap’: Permission denied
+setfacl: ./linux-yocto-3.19-old/.mailmap: Permission denied
+find: ‘./linux-yocto-3.19-old/COPYING’: Permission denied
+setfacl: ./linux-yocto-3.19-old/COPYING: Permission denied
+find: ‘./linux-yocto-3.19-old/CREDITS’: Permission denied
+setfacl: ./linux-yocto-3.19-old/CREDITS: Permission denied
+find: ‘./linux-yocto-3.19-old/Kbuild’: Permission denied
+setfacl: ./linux-yocto-3.19-old/Kbuild: Permission denied
+find: ‘./linux-yocto-3.19-old/Kconfig’: Permission denied
+setfacl: ./linux-yocto-3.19-old/Kconfig: Permission denied
+find: ‘./linux-yocto-3.19-old/MAINTAINERS’: Permission denied
+setfacl: ./linux-yocto-3.19-old/MAINTAINERS: Permission denied
+find: ‘./linux-yocto-3.19-old/README’: Permission denied
+setfacl: ./linux-yocto-3.19-old/README: Permission denied
+find: ‘./linux-yocto-3.19-old/REPORTING-BUGS’: Permission denied
+setfacl: ./linux-yocto-3.19-old/REPORTING-BUGS: Permission denied
+find: ‘./linux-yocto-3.19-old/.gitignore’: Permission denied
+setfacl: ./linux-yocto-3.19-old/.gitignore: Permission denied
+find: ‘./linux-yocto-3.19-old/Makefile’: Permission denied
+setfacl: ./linux-yocto-3.19-old/Makefile: Permission denied
+#+END_SRC
+
+*** TODO Lucien will need to delete files with his permissions.
+
+** Display Final Permissions of ~/scratch/fall2017/37~
+
+#+BEGIN_SRC shell
+os2 /scratch/fall2017 169% getfacl 37
+# file: 37
+# owner: browtayl
+# group: upg55341
+user::rwx
+user:browtayl:rwx
+user:tamnol:rwx
+group::rwx
+mask::rwx
+other::---
+default:user::rwx
+default:user:browtayl:rwx
+default:user:tamnol:rwx
+default:group::rwx
+default:mask::rwx
+default:other::---
+#+END_SRC
+** Clone Linux Again
+
+Our Linux source directory is ~/scratch/fall2017/37/linux-yocto-3.19~. Our
+development branch ~group37-dev~ is based on tag ~v3.19.2~.
+
+#+BEGIN_SRC shell
+os2 /scratch/fall2017/37 171% git clone git://git.yoctoproject.org/linux-yocto-3.19
+Cloning into 'linux-yocto-3.19'...
+remote: Counting objects: 3989315, done.
+remote: Compressing objects: 100% (597266/597266), done.
+Receiving objects: 100% (3989315/3989315), 842.73 MiB | 41.51 MiB/s, done.
+remote: Total 3989315 (delta 3357793), reused 3989307 (delta 3357785)
+Resolving deltas: 100% (3357793/3357793), done.
+Checking out files: 100% (48440/48440), done.
+os2 /scratch/fall2017/37 173% cd linux-yocto-3.19
+os2 /scratch/fall2017/37/linux-yocto-3.19 174% git checkout v3.19.2
+Note: checking out 'v3.19.2'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b new_branch_name
+
+HEAD is now at 660613d... Linux 3.19.2
+os2 /scratch/fall2017/37/linux-yocto-3.19 175% git checkout -b group37-dev
+Switched to a new branch 'group37-dev'
+os2 /scratch/fall2017/37/linux-yocto-3.19 176% 
+#+END_SRC
+
+** Initialize Documentation Repository
+
+Store documents and diffs in a new Git repository.
+
+#+BEGIN_SRC shell
+os2 /scratch/fall2017/37 177% mkdir cs444-operating-systems-ii
+os2 /scratch/fall2017/37 178% cd cs444-operating-systems-ii/
+os2 /scratch/fall2017/37/cs444-operating-systems-ii 179% git init
+Initialized empty Git repository in /scratch/fall2017/37/cs444-operating-systems-ii/.git/
+os2 /scratch/fall2017/37/cs444-operating-systems-ii 185% wget https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+--2017-10-03 03:10:31--  https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+Resolving www.gnu.org (www.gnu.org)... 208.118.235.148, 2001:4830:134:3::a
+Connecting to www.gnu.org (www.gnu.org)|208.118.235.148|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 18092 (18K) [text/plain]
+Saving to: ‘gpl-2.0.txt’
+
+100%[===========================================================================>] 18,092      --.-K/s   in 0.09s   
+
+2017-10-03 03:10:32 (198 KB/s) - ‘gpl-2.0.txt’ saved [18092/18092]
+
+os2 /scratch/fall2017/37/cs444-operating-systems-ii 186% ls
+gpl-2.0.txt  README.md
+os2 /scratch/fall2017/37/cs444-operating-systems-ii 187% mv gpl-2.0.txt LICENSE.txt
+os2 /scratch/fall2017/37/cs444-operating-systems-ii 188% git add README.md 
+os2 /scratch/fall2017/37/cs444-operating-systems-ii 196% git status
+# On branch master
+#
+# Initial commit
+#
+# Changes to be committed:
+#   (use "git rm --cached <file>..." to unstage)
+#
+#       new file:   README.md
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#       LICENSE.txt
+os2 /scratch/fall2017/37/cs444-operating-systems-ii 197% git commit -m "initial readme"
+[master (root-commit) 869e6e2] initial readme
+ 1 file changed, 11 insertions(+)
+ create mode 100644 README.md
+os2 /scratch/fall2017/37/cs444-operating-systems-ii 198% git add LICENSE.txt 
+os2 /scratch/fall2017/37/cs444-operating-systems-ii 199% git commit -m "GNU GPLv2"
+[master 8d955cc] GNU GPLv2
+ 1 file changed, 339 insertions(+)
+ create mode 100644 LICENSE.txt
+os2 /scratch/fall2017/37/cs444-operating-systems-ii 201% git add acl.org
+os2 /scratch/fall2017/37/cs444-operating-systems-ii 202% git commit -m 'document acl and git initialization'
+[master e6f53a4] document acl and git initialization
+ 1 file changed, 217 insertions(+)
+ create mode 100644 acl.org
+#+END_SRC
