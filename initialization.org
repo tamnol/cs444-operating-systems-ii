@@ -265,3 +265,36 @@ os2 /scratch/fall2017/37/cs444-operating-systems-ii 202% git commit -m 'document
  1 file changed, 217 insertions(+)
  create mode 100644 acl.org
 #+END_SRC
+
+** Clone Repositories into Home Directory
+
+#+BEGIN_SRC shell
+os2 ~/cs444 219% git clone file:///scratch/fall2017/37/cs444-operating-systems-ii
+Cloning into 'cs444-operating-systems-ii'...
+remote: Counting objects: 12, done.
+remote: Compressing objects: 100% (10/10), done.
+remote: Total 12 (delta 3), reused 0 (delta 0)
+Receiving objects: 100% (12/12), 9.88 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (3/3), done.
+os2 ~/cs444 222% git clone file:///scratch/fall2017/37/linux-yocto-3.19
+Cloning into 'linux-yocto-3.19'...
+remote: Counting objects: 3984149, done.
+remote: Compressing objects: 100% (596542/596542), done.
+Receiving objects: 100% (3984149/3984149), 841.30 MiB | 42.64 MiB/s, done.
+remote: Total 3984149 (delta 3354018), reused 3983732 (delta 3353767)
+Resolving deltas: 100% (3354018/3354018), done.
+Checking out files: 100% (48441/48441), done.
+os2 ~/cs444 223% ls
+cs444-operating-systems-ii  linux-yocto-3.19
+os2 ~/cs444 224% cd linux-yocto-3.19/
+os2 ~/cs444/linux-yocto-3.19 226% git status
+# On branch group37-dev
+#
+# It took 3.98 seconds to enumerate untracked files. 'status -uno'
+# may speed it up, but you have to be careful not to forget to add
+# new files yourself (see 'git help status').
+nothing to commit, working directory clean
+os2 ~/cs444/linux-yocto-3.19 227% git remote -v
+origin  file:///scratch/fall2017/37/linux-yocto-3.19 (fetch)
+origin  file:///scratch/fall2017/37/linux-yocto-3.19 (push)
+#+END_SRC
