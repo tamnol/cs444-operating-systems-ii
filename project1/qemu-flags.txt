@@ -1,0 +1,34 @@
+# List of QEMU Flags
+#
+# Taken directly from `qemu-system-i386 --help`.
+#
+# Group 37: Taylor Alexander Brown & Lucien Armand Tamdja Tamno
+# Oregon State University
+# CS 444: Operating Systems II
+# Fall 2017
+
+-gdb dev        wait for gdb connection on 'dev'
+-S              freeze CPU at startup (use 'c' to start execution)
+-nographic      disable graphical output and redirect serial I/Os to console
+-kernel bzImage use 'bzImage' as kernel image
+-drive [file=file][,if=type][,bus=n][,unit=m][,media=d][,index=i]
+       [,cyls=c,heads=h,secs=s[,trans=t]][,snapshot=on|off]
+       [,cache=writethrough|writeback|none|directsync|unsafe][,format=f]
+       [,serial=s][,addr=A][,rerror=ignore|stop|report]
+       [,werror=ignore|stop|report|enospc][,id=name][,aio=threads|native]
+       [,readonly=on|off][,copy-on-read=on|off]
+       [,discard=ignore|unmap][,detect-zeroes=on|off|unmap]
+       [[,bps=b]|[[,bps_rd=r][,bps_wr=w]]]
+       [[,iops=i]|[[,iops_rd=r][,iops_wr=w]]]
+       [[,bps_max=bm]|[[,bps_rd_max=rm][,bps_wr_max=wm]]]
+       [[,iops_max=im]|[[,iops_rd_max=irm][,iops_wr_max=iwm]]]
+       [[,iops_size=is]]
+                use 'file' as a drive image
+-enable-kvm     enable KVM full virtualization support
+-net none       use it alone to have zero network devices. If no -net option
+                is provided, the default is '-net nic -net user'
+-usb            enable the USB driver (will be the default soon)
+-rtc [base=utc|localtime|date][,clock=host|rt|vm][,driftfix=none|slew]
+                set the RTC base and clock, enable drift fix for clock ticks (x86 only)
+-no-reboot      exit instead of rebooting
+-append cmdline use 'cmdline' as kernel command line
