@@ -22,9 +22,9 @@ qemu-system-i386 \
     -enable-kvm \
     -net none \
     -usb \
-    -localtime \
-    --no-reboot \
-    --append 'root=/dev/vda rw console=ttyS0 debug' \
+    -rtc base=localtime \
+    -no-reboot \
+    -append 'root=/dev/vda rw console=ttyS0 debug' \
     &
 
 # boot kernel in gdb
