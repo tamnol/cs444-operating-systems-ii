@@ -156,7 +156,7 @@ find: ‘./linux-yocto-3.19-old/Makefile’: Permission denied
 setfacl: ./linux-yocto-3.19-old/Makefile: Permission denied
 #+END_SRC
 
-*** TODO Lucien will need to delete files with his permissions.
+*** DONE Lucien will need to delete files with his permissions.
 
 ** Display Final Permissions of ~/scratch/fall2017/37~
 
