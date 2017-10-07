@@ -1,0 +1,47 @@
+* Steps to Build and Run the Kernel
+
+These steps were performed with the Bash shell:
+
+#+BEGIN_SRC shell
+os2 ~/cs444/cs444-operating-systems-ii 151% bash
+bash-4.2$ 
+#+END_SRC
+
+** Source Environment Configuration Script
+
+#+BEGIN_SRC shell
+bash-4.2$ source /scratch/files/environment-setup-i586-poky-linux
+#+END_SRC
+
+** Create Boot Script
+
+The boot script ~boot.bash~ was created containing the QEMU command line. It was made executable with ~chmod ug+x boot.bash~. It calls the GDB command file ~boot.gdb~ to begin remote debugging.
+
+** Run Sample Kernel on QEMU
+
+*** Download Sample Kernel and Filesystem
+
+The sample kernel and filesystem were copied into the group directory:
+
+#+BEGIN_SRC shell
+bash-4.2$ cd /scratch/fall2017/37/
+bash-4.2$ mkdir kernels
+bash-4.2$ mkdir disks
+bash-4.2$ cp /scratch/files/bzImage-qemux86.bin kernels/
+bash-4.2$ cp /scratch/files/core-image-lsb-sdk-qemux86.ext4 disks/
+#+END_SRC
+
+*** Run Kernel
+
+To run the kernel in QEMU and boot it in GDB, execute the boot script with the path to the desired kernel:
+
+#+BEGIN_SRC shell
+bash-4.2$ ./boot.bash /scratch/fall2017/37/kernels/bzImage-qemux86.bin
+#+END_SRC
+
+The kernel boots but hangs on login. Terminate the process with ~C-c~ and quit GDB with ~C-d~.
+
+** TODO Build New Kernel
+
+** TODO Run New Kernel on QEMU
+
