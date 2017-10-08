@@ -10,3 +10,6 @@ extern bool testproc();
 extern bool supports_rdrand();
 
 extern int rdrand();
+
+void mtrand_init();
+int mtrand();

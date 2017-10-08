@@ -10,5 +10,9 @@
 CC = gcc
 CFLAGS =
 
-test: test.S test.c
-	$(CC) $(CFLAGS) test.S test.c -o test
+test: test.S test.c mt19937ar.o
+	$(CC) $(CFLAGS) mt19937ar.o test.S test.c -o test
+
+mt19937ar.o: mt19937ar.c
+	$(CC) $(CFLAGS) -c mt19937ar.c -o mt19937ar.o
+	objcopy --redefine-sym main=mt19937ar_main mt19937ar.o
