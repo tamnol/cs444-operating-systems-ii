@@ -16,6 +16,7 @@ struct item buffer[32];
 
 int main(int argc, char **argv)
 {
+    mtrand_init();
     return rand_between(2,9);
 }
 
