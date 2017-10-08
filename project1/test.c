@@ -18,6 +18,11 @@ int main(int argc, char **argv)
         printf("pseudorandom number is %d\n", mtrand());
     }
 
+    printf("random integers between 2 and 9 are");
+    for (i=0; i<100; ++i)
+        printf(" %d", rand_between(2,9));
+    printf("\n");
+
     return 0;
 }
 
@@ -30,4 +35,14 @@ void mtrand_init()
 int mtrand()
 {
     return genrand_int32();
+}
+
+int rand_between(int x, int y)
+{
+    unsigned int n;
+
+    if ((supports_rdrand() == false) || ((n=rdrand()) == 0))
+        n = mtrand();
+
+    return (n % (y-x+1)) + x;
 }
