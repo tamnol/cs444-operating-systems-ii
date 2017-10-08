@@ -25,24 +25,3 @@ int main(int argc, char **argv)
 
     return 0;
 }
-
-void mtrand_init()
-{
-    int seed = time(NULL);
-    init_genrand(seed);
-}
-
-int mtrand()
-{
-    return genrand_int32();
-}
-
-int rand_between(int x, int y)
-{
-    unsigned int n;
-
-    if ((supports_rdrand() == false) || ((n=rdrand()) == 0))
-        n = mtrand();
-
-    return (n % (y-x+1)) + x;
-}

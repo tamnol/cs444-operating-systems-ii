@@ -1,7 +1,7 @@
-#include <x86intrin.h>
-
 /*
  * Concurrency 1: The Producer-Consumer Problem
+ *
+ * File: concurrency.c
  *
  * Group 37: Taylor Alexander Brown & Lucien Armand Tamdja Tamno
  * Oregon State University
@@ -9,22 +9,33 @@
  * Fall 2017
  */
 
-int random_wait();
+#include <stdio.h>
+#include "concurrency.h"
 
-/* an item is a structure with a number and a time */
-struct item {
-    int number, time;
-};
-
-/* a buffer is an array of 32 items */
 struct item buffer[32];
 
-/* entry point */
 int main(int argc, char **argv)
 {
+    return rand_between(2,9);
 }
 
-/* generate a random wait number between 2 and 9 */
-int random_wait() {
-    return 2; /* FIXME */
+void mtrand_init()
+{
+    int seed = time(NULL);
+    init_genrand(seed);
+}
+
+int mtrand()
+{
+    return genrand_int32();
+}
+
+int rand_between(int x, int y)
+{
+    unsigned int n;
+
+    if ((supports_rdrand() == false) || ((n=rdrand()) == 0))
+        n = mtrand();
+
+    return (n % (y-x+1)) + x;
 }
