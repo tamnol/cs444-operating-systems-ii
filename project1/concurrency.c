@@ -42,7 +42,9 @@ int main(int argc, char **argv)
     /* create consumer threads */
     create_threads(CONSUMER_THREADS, consumer, consumer_start);
 
-    printf("main process %d\n", getpid()); /* DEBUG */
+    #ifdef DEBUG
+    printf("main process %d\n", getpid());
+    #endif
 
     /* exit main process while threads still running */
     pthread_exit(NULL);
@@ -74,14 +76,20 @@ void create_threads(int number, pthread_t thread[], void *(*start)(void*))
 /* producer thread entry point */
 void *producer_start(void *argument)
 {
-    printf("producer thread 0x%lx\n", (unsigned long)pthread_self()); /* DEBUG */
+    #ifdef DEBUG
+    printf("producer thread 0x%lx\n", (unsigned long)pthread_self());
+    #endif
+
     pthread_exit(NULL);
 }
 
 /* consumer thread entry point */
 void *consumer_start(void *argument)
 {
-    printf("consumer thread 0x%lx\n", (unsigned long)pthread_self()); /* DEBUG */
+    #ifdef DEBUG
+    printf("consumer thread 0x%lx\n", (unsigned long)pthread_self());
+    #endif
+
     pthread_exit(NULL);
 }
 

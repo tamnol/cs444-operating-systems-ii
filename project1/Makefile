@@ -8,7 +8,7 @@
 # Fall 2017
 
 CC = gcc
-CFLAGS = -pthread -ggdb
+CFLAGS = -pthread -ggdb -DDEBUG
 
 all: concurrency test
 
