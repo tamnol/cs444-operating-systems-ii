@@ -26,7 +26,7 @@ Event-driven programs are a good example. An "event" is something that happens t
 
      If a producer thread has an item to put in the buffer while the buffer is full, it blocks until a consumer removes an item.
 
-** [2/4] details
+** [3/4] details
 
    Write C code with pthreads which implements a solution which satisfies the above description. A few important details:
 
@@ -52,6 +52,6 @@ Event-driven programs are a good example. An "event" is something that happens t
 
      Your buffer in this case can hold 32 items. It must be implicitly shared between the threads.
 
-   - [ ] choose synchronization construct
+   - [X] choose synchronization construct
 
      Use whatever synchronization construct you feel is appropriate.

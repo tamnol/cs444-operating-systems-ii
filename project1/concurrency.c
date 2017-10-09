@@ -9,6 +9,7 @@
  * Fall 2017
  */
 
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
@@ -16,6 +17,7 @@
 
 /* shared buffer */
 struct item buffer[NUMBER_OF_ITEMS];
+pthread_mutex_t buffer_lock = PTHREAD_MUTEX_INITIALIZER;
 
 /* producer and consumer thread lists */
 pthread_t producer[PRODUCER_THREADS];
@@ -73,24 +75,102 @@ void create_threads(int number, pthread_t thread[], void *(*start)(void*))
     }
 }
 
+/* return true if item is empty, otherwise return false */
+bool item_is_empty(struct item *item)
+{
+    return ((item->number == 0) && (item->time == 0));
+}
+
 /* producer thread entry point */
 void *producer_start(void *argument)
 {
-    #ifdef DEBUG
-    printf("producer thread 0x%lx\n", (unsigned long)pthread_self());
-    #endif
+    int i, wait_time;
+    struct item *item = NULL;
+    unsigned long tid = (unsigned long)pthread_self();
 
-    pthread_exit(NULL);
+    /* print thread creation */
+    printf("0x%lx: producer thread created\n", tid);
+
+    loop {
+
+        /* lock the buffer */
+        pthread_mutex_lock(&buffer_lock); /* TODO error check */
+
+        /* find the address of the first empty item */
+        for (i=0; i<NUMBER_OF_ITEMS; ++i) {
+            if (item_is_empty(&buffer[i])) {
+                item = &buffer[i];
+                break;
+            }
+        }
+
+        /* if an empty item was found */
+        if (item != NULL) {
+
+            /* wait for item to be produced */
+            sleep(wait_time=rand_between(3,7));
+
+            /* produce new item */
+            item->number = rand();
+            item->time = rand_between(2,9);
+
+            /* print item produced */
+            printf("0x%lx: produced %d after %d seconds\n",
+                   tid, item->number, wait_time);
+
+            /* reset item address */
+            item = NULL;
+        }
+
+        /* unlock the buffer and continue */
+        pthread_mutex_unlock(&buffer_lock); /* TODO error check */
+    }
 }
 
 /* consumer thread entry point */
 void *consumer_start(void *argument)
 {
-    #ifdef DEBUG
-    printf("consumer thread 0x%lx\n", (unsigned long)pthread_self());
-    #endif
+    int i;
+    struct item *item = NULL;
+    unsigned long tid = (unsigned long)pthread_self();
 
-    pthread_exit(NULL);
+    /* print thread creation */
+    printf("0x%lx: consumer thread created\n", tid);
+
+    loop {
+
+        /* lock the buffer */
+        pthread_mutex_lock(&buffer_lock); /* TODO error check */
+
+        /* find the address of the first full item */
+        for (i=0; i<NUMBER_OF_ITEMS; ++i) {
+            if (!item_is_empty(&buffer[i])) {
+                item = &buffer[i];
+                break;
+            }
+        }
+
+        /* if a full item was found */
+        if (item != NULL) {
+
+            /* wait for item to be consumed */
+            sleep(item->time);
+
+            /* print item consumed */
+            printf("0x%lx: consumed %d after %d seconds\n",
+                   tid, item->number, item->time);
+
+            /* make item empty */
+            item->time = 0;
+            item->number = 0;
+
+            /* reset item address */
+            item = NULL;
+        }
+
+        /* unlock the buffer */
+        pthread_mutex_unlock(&buffer_lock); /* TODO error check */
+    }
 }
 
 void mtrand_init()
@@ -104,12 +184,17 @@ int mtrand()
     return genrand_int32();
 }
 
-int rand_between(int x, int y)
+int rand()
 {
-    unsigned int n;
+    int n;
 
     if ((supports_rdrand() == false) || ((n=rdrand()) == 0))
         n = mtrand();
 
-    return (n % (y-x+1)) + x;
+    return n;
+}
+
+int rand_between(int x, int y)
+{
+    return ((unsigned int)rand() % (y-x+1)) + x;
 }

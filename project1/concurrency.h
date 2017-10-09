@@ -39,3 +39,6 @@ int rand_between(int x, int y);
 #define NUMBER_OF_ITEMS 32
 #define PRODUCER_THREADS 5
 #define CONSUMER_THREADS 5
+
+/* infinite loop */
+#define loop while(1)
