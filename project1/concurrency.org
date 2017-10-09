@@ -1,0 +1,57 @@
+* Concurrency 1: The Producer-Consumer Problem
+
+http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index.cgi?hw=synchro1
+
+The purpose of these concurrent programming exercises is to hone your skills in thinking in parallel. This is a very important skill, to the point where many companies view it as being as fundamental as basic algebra or being able to write code. Implementation must be in a mix of C and ASM.
+
+For this first exercise, you will be implementing a solution to the producer-consumer problem.
+
+In multithreaded programs there is often a division of labor between threads. In one common pattern, _some threads are producers and some are consumers. Producers create items of some kind and add them to a data structure; consumers remove the items and process them._
+
+Event-driven programs are a good example. An "event" is something that happens that requires the program to respond: the user presses a key or moves the mouse, a block of data arrives from the disk, a packet arrives from the network, a pending operation completes. Whenever an event occurs, a producer thread creates an event object and adds it to the event buffer. Concurrently, consumer threads take events out of the buffer and process them. In this case, the consumers are called "event handlers."
+
+** [0/3] synchronization constraints
+
+   There are several synchronization constraints that we need to enforce to make this system work correctly:
+
+   - [ ] exclusive access
+
+     While an item is being added to or removed from the buffer, the buffer is in an inconsistent state. Therefore, threads must have exclusive access to the buffer.
+
+   - [ ] consumer blocks if empty
+
+     If a consumer thread arrives while the buffer is empty, it blocks until a producer adds a new item.
+
+   - [ ] producer blocks if full
+
+     If a producer thread has an item to put in the buffer while the buffer is full, it blocks until a consumer removes an item.
+
+** [2/4] details
+
+   Write C code with pthreads which implements a solution which satisfies the above description. A few important details:
+
+   - [X] The item in the buffer should be a struct with two numbers in it.
+
+     - [X] first value number
+
+       The first value is just a number. The consumer will print out this value as part of its consumption.
+
+     - [X] second value random wait 2-9
+
+       The second value is a random waiting period between 2 and 9 seconds, which the consumer will sleep for prior to printing the other value. This is the "work" done to consume the item.
+
+     - [X] rdrand if if supported, mtrand if not
+
+       Both of these values should be created using the rdrand x86 ASM instruction on systems that support it, and using the Mersenne Twister on systems that don't support rdrand. It is your responsibility to learn how to do this, how to include it in your code, and how to condition the value such that it is within the range you want. Being able to work with x86 ASM is actually a necessary skill in this class. Hint: os-class does not support rdrand. Your laptop likely does.
+
+   - [ ] producer random wait 3-7
+
+      Your producer should also wait a random amount of time (in the range of 3-7 seconds) before "producing" a new item.
+
+   - [X] 32 item shared buffer
+
+     Your buffer in this case can hold 32 items. It must be implicitly shared between the threads.
+
+   - [ ] choose synchronization construct
+
+     Use whatever synchronization construct you feel is appropriate.

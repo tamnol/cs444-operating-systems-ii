@@ -34,3 +34,8 @@ int mtrand();
 
 /* return a random integer between x and y, inclusive */
 int rand_between(int x, int y);
+
+/* thread constants */
+#define NUMBER_OF_ITEMS 32
+#define PRODUCER_THREADS 5
+#define CONSUMER_THREADS 5
