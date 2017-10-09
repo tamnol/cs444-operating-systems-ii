@@ -12,10 +12,10 @@ CFLAGS = -pthread -ggdb -DDEBUG
 
 all: concurrency test
 
-concurrency: mt19937ar.o concurrency.S concurrency.c
+concurrency: mt19937ar.o concurrency.h concurrency.S concurrency.c
 	$(CC) $(CFLAGS) mt19937ar.o concurrency.S concurrency.c -o concurrency
 
-test: mt19937ar.o concurrency.S concurrency.c test.S test.c
+test: mt19937ar.o concurrency.h concurrency.S concurrency.c test.S test.c
 	$(CC) $(CFLAGS) -c concurrency.c -o concurrency.o
 	objcopy --redefine-sym main=concurrency_main concurrency.o
 	$(CC) $(CFLAGS) mt19937ar.o concurrency.S concurrency.o test.S test.c -o test

@@ -84,59 +84,81 @@ bool item_is_empty(struct item *item)
 /* producer thread entry point */
 void *producer_start(void *argument)
 {
-    int i, wait_time;
+    int i, wait_time, item_number, item_time;
     struct item *item = NULL;
     unsigned long tid = (unsigned long)pthread_self();
 
     /* print thread creation */
     printf("0x%lx: producer thread created\n", tid);
 
+    /* produce item loop */
     loop {
 
-        /* lock the buffer */
-        pthread_mutex_lock(&buffer_lock); /* TODO error check */
+        /* wait for item to be produced */
+        sleep(wait_time=rand_between(3,7));
 
-        /* find the address of the first empty item */
-        for (i=0; i<NUMBER_OF_ITEMS; ++i) {
-            if (item_is_empty(&buffer[i])) {
-                item = &buffer[i];
+        /* produce new item */
+        item_number = rand();
+        item_time = rand_between(2,9);
+
+        /* print item produced */
+        printf("0x%lx: produced %d after %d seconds\n",
+               tid, item_number, wait_time);
+
+        /* store item loop */
+        loop {
+
+            /* lock the buffer */
+            pthread_mutex_lock(&buffer_lock); /* TODO error check */
+
+            /* find the address of the first empty item */
+            for (i=0; i<NUMBER_OF_ITEMS; ++i) {
+                if (item_is_empty(&buffer[i])) {
+                    item = &buffer[i];
+                    break;
+                }
+            }
+
+            /* if an empty item was found */
+            if (item != NULL) {
+
+                /* store the new item */
+                item->number = item_number;
+                item->time = item_time;
+
+                /* print item stored */
+                printf("0x%lx: stored %d\n", tid, item->number, wait_time);
+
+                /* reset item address */
+                item = NULL;
+
+                /* unlock the buffer */
+                pthread_mutex_unlock(&buffer_lock); /* TODO error check */
+
+                /* exit store item loop */
                 break;
+
+            /* otherwise */
+            } else {
+
+                /* unlock the buffer */
+                pthread_mutex_unlock(&buffer_lock); /* TODO error check */
             }
         }
-
-        /* if an empty item was found */
-        if (item != NULL) {
-
-            /* wait for item to be produced */
-            sleep(wait_time=rand_between(3,7));
-
-            /* produce new item */
-            item->number = rand();
-            item->time = rand_between(2,9);
-
-            /* print item produced */
-            printf("0x%lx: produced %d after %d seconds\n",
-                   tid, item->number, wait_time);
-
-            /* reset item address */
-            item = NULL;
-        }
-
-        /* unlock the buffer and continue */
-        pthread_mutex_unlock(&buffer_lock); /* TODO error check */
     }
 }
 
 /* consumer thread entry point */
 void *consumer_start(void *argument)
 {
-    int i;
+    int i, item_number, item_time;
     struct item *item = NULL;
     unsigned long tid = (unsigned long)pthread_self();
 
     /* print thread creation */
     printf("0x%lx: consumer thread created\n", tid);
 
+    /* consume item loop */
     loop {
 
         /* lock the buffer */
@@ -150,15 +172,12 @@ void *consumer_start(void *argument)
             }
         }
 
-        /* if a full item was found */
+        /* if a non-empty item was found */
         if (item != NULL) {
 
-            /* wait for item to be consumed */
-            sleep(item->time);
-
-            /* print item consumed */
-            printf("0x%lx: consumed %d after %d seconds\n",
-                   tid, item->number, item->time);
+            /* retrieve item values */
+            item_number = item->number;
+            item_time = item->time;
 
             /* make item empty */
             item->time = 0;
@@ -166,10 +185,23 @@ void *consumer_start(void *argument)
 
             /* reset item address */
             item = NULL;
-        }
 
-        /* unlock the buffer */
-        pthread_mutex_unlock(&buffer_lock); /* TODO error check */
+            /* unlock the buffer */
+            pthread_mutex_unlock(&buffer_lock); /* TODO error check */
+
+            /* wait for item to be consumed */
+            sleep(item_time);
+
+            /* print item consumed */
+            printf("0x%lx: consumed %d after %d seconds\n",
+                   tid, item_number, item_time);
+
+        /* otherwise */
+        } else {
+
+            /* unlock the buffer */
+            pthread_mutex_unlock(&buffer_lock); /* TODO error check */
+        }
     }
 }
 

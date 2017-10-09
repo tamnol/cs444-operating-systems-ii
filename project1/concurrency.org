@@ -10,23 +10,23 @@ In multithreaded programs there is often a division of labor between threads. In
 
 Event-driven programs are a good example. An "event" is something that happens that requires the program to respond: the user presses a key or moves the mouse, a block of data arrives from the disk, a packet arrives from the network, a pending operation completes. Whenever an event occurs, a producer thread creates an event object and adds it to the event buffer. Concurrently, consumer threads take events out of the buffer and process them. In this case, the consumers are called "event handlers."
 
-** [0/3] synchronization constraints
+** [3/3] synchronization constraints
 
    There are several synchronization constraints that we need to enforce to make this system work correctly:
 
-   - [ ] exclusive access
+   - [X] exclusive access
 
      While an item is being added to or removed from the buffer, the buffer is in an inconsistent state. Therefore, threads must have exclusive access to the buffer.
 
-   - [ ] consumer blocks if empty
+   - [X] consumer blocks if empty
 
      If a consumer thread arrives while the buffer is empty, it blocks until a producer adds a new item.
 
-   - [ ] producer blocks if full
+   - [X] producer blocks if full
 
      If a producer thread has an item to put in the buffer while the buffer is full, it blocks until a consumer removes an item.
 
-** [3/4] details
+** [4/4] details
 
    Write C code with pthreads which implements a solution which satisfies the above description. A few important details:
 
@@ -44,7 +44,7 @@ Event-driven programs are a good example. An "event" is something that happens t
 
        Both of these values should be created using the rdrand x86 ASM instruction on systems that support it, and using the Mersenne Twister on systems that don't support rdrand. It is your responsibility to learn how to do this, how to include it in your code, and how to condition the value such that it is within the range you want. Being able to work with x86 ASM is actually a necessary skill in this class. Hint: os-class does not support rdrand. Your laptop likely does.
 
-   - [ ] producer random wait 3-7
+   - [X] producer random wait 3-7
 
       Your producer should also wait a random amount of time (in the range of 3-7 seconds) before "producing" a new item.
 
@@ -55,3 +55,90 @@ Event-driven programs are a good example. An "event" is something that happens t
    - [X] choose synchronization construct
 
      Use whatever synchronization construct you feel is appropriate.
+
+** [4/4] write up
+
+   - [X] main point of assignment
+
+     practice assembly language, concurrency, synchronization, and scheduling.
+
+   - [X] approach to problem
+
+     1. use a test program to implement conditional random number generator
+     2. outline a multithreaded program without shared memory
+     3. solve producer/consumer problem
+
+   - [X] ensure correctness
+
+     verify input/output log:
+
+#+BEGIN_SRC shell
+
+
+
+$ ./concurrency 
+main process 27017
+0x7f8901088700: consumer thread created
+0x7f8900837700: consumer thread created
+0x7f88fffe6700: consumer thread created
+0x7f88ff795700: consumer thread created
+0x7f89018d9700: consumer thread created
+0x7f890212a700: producer thread created
+0x7f890297b700: producer thread created
+0x7f89031cc700: producer thread created
+0x7f8903a1d700: producer thread created
+0x7f890426e700: producer thread created
+0x7f890212a700: produced 147413625 after 3 seconds
+0x7f890212a700: stored 147413625
+0x7f89031cc700: produced -441325338 after 3 seconds
+0x7f89031cc700: stored -441325338
+0x7f890297b700: produced -1244546621 after 5 seconds
+0x7f890297b700: stored -1244546621
+0x7f8903a1d700: produced -1652679206 after 6 seconds
+0x7f8903a1d700: stored -1652679206
+0x7f890426e700: produced 1298637652 after 7 seconds
+0x7f890212a700: produced -1334071706 after 4 seconds
+0x7f890426e700: stored 1298637652
+0x7f890212a700: stored -1334071706
+0x7f89031cc700: produced 677558004 after 6 seconds
+0x7f89031cc700: stored 677558004
+0x7f890297b700: produced 1087627342 after 5 seconds
+0x7f890297b700: stored 1087627342
+0x7f8900837700: consumed -441325338 after 8 seconds
+0x7f8901088700: consumed 147413625 after 8 seconds
+0x7f88ff795700: consumed 1298637652 after 4 seconds
+0x7f890426e700: produced -1613095943 after 5 seconds
+0x7f890426e700: stored -1613095943
+0x7f88fffe6700: consumed -1244546621 after 7 seconds
+0x7f8903a1d700: produced 35236426 after 7 seconds
+0x7f8903a1d700: stored 35236426
+0x7f89018d9700: consumed -1652679206 after 7 seconds
+0x7f890212a700: produced 721650640 after 7 seconds
+0x7f890212a700: stored 721650640
+0x7f89031cc700: produced -1938240608 after 6 seconds
+0x7f89031cc700: stored -1938240608
+0x7f89018d9700: consumed 35236426 after 2 seconds
+0x7f890297b700: produced -1044271828 after 6 seconds
+0x7f890297b700: stored -1044271828
+0x7f8903a1d700: produced 680751587 after 4 seconds
+0x7f8903a1d700: stored 680751587
+0x7f890212a700: produced 1965150606 after 4 seconds
+0x7f890212a700: stored 1965150606
+0x7f88fffe6700: consumed -1613095943 after 6 seconds
+0x7f890297b700: produced -1120407744 after 3 seconds
+0x7f890297b700: stored -1120407744
+0x7f8900837700: consumed 677558004 after 8 seconds
+0x7f890426e700: produced 11119425 after 7 seconds
+0x7f890426e700: stored 11119425
+0x7f88ff795700: consumed 1087627342 after 8 seconds
+0x7f89031cc700: produced -1490137272 after 5 seconds
+0x7f89031cc700: stored -1490137272
+0x7f89018d9700: consumed 721650640 after 5 seconds
+0x7f8901088700: consumed -1334071706 after 9 seconds
+^C
+#+END_SRC
+
+   - [X] what learn
+
+     - assembly instructions
+     - pthreads API
