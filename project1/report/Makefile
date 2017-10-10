@@ -7,6 +7,6 @@
 # CS 444: Operating Systems II
 # Fall 2017
 
-report.pdf:
+all:
 	pdflatex report.ltx
 	pdflatex report.ltx
