@@ -1,2 +1,11 @@
+% Emacs temporary files
 *~
+
+% Object Files
 *.o
+
+# LaTex temporary files
+*.aux
+*.log
+*.pdf
+*.toc
