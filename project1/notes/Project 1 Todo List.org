@@ -7,7 +7,7 @@ Group 37: Taylor Alexander Brown & Lucien Armand Tamdja Tamno
 http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index.cgi?hw=1
 http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index.cgi?hw=synchro1
 
-** [7/10] Project 1 Requirements
+** [9/10] Project 1 Requirements
 
 - [X] clone git://git.yoctoproject.org/linux-yocto-3.19
 - [X] checkout v3.19.2
@@ -19,7 +19,7 @@ http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index
 - [X] [Taylor] build new kernel
 - [ ] [Lucien] run new kernel on qemu
 - [X] [Taylor] concurrency exercise
-- [-] [Taylor] create document
+- [X] [Taylor] create document
   - [X] log of commands
   - [X] [Taylor] concurrency solution write up
     - [X] main point of assignment
@@ -27,15 +27,15 @@ http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index
     - [X] ensure correctness
     - [X] what learn
   - [X] [Taylor] explanation of qemu flags
-  - [ ] [Taylor] version control log as table
-  - [ ] [Taylor] work log
-- [-] [Taylor] submit by 2017-10-09 23:59:59
-  - [ ] name file CS444_project1_37.tar.bz2
-  - [-] contents
-    - [ ] concurrency C file
-    - [-] LaTeX writeup
-      - [ ] LaTeX source
-      - [ ] makefile
+  - [X] [Taylor] version control log as table
+  - [X] [Taylor] work log
+- [X] [Taylor] submit by 2017-10-09 23:59:59
+  - [X] name file CS444_project1_37.tar.bz2
+  - [X] contents
+    - [X] concurrency C file
+    - [X] LaTeX writeup
+      - [X] LaTeX source
+      - [X] makefile
       - [X] follow format guidelines
-  - [ ] both names present in all submitted files
-  - [ ] one member submits via TEACH
+  - [X] both names present in all submitted files
+  - [X] one member submits via TEACH

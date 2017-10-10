@@ -446,8 +446,50 @@ Group work was logged using a shared todo list and activity log and coordinated 
 The todo list tracked each action item and by whom it was implemented:
 
 \begin{lstlisting}
-% TODO insert todo list
+* Project 1 Todo List
+
+Group 37: Taylor Alexander Brown & Lucien Armand Tamdja Tamno
+
+** Project 1 Links
+
+http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index.cgi?hw=1
+http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index.cgi?hw=synchro1
+
+** [9/10] Project 1 Requirements
+
+- [X] clone git://git.yoctoproject.org/linux-yocto-3.19
+- [X] checkout v3.19.2
+- [X] [Taylor] create repo in /scratch/fall2017/37
+  - [X] (clone central repos into home directory)
+- [X] source environment configuration script
+- [X] [Taylor] run sample kernel on qemu
+  - [X] [Taylor] (create a qemu shell script to automate this)
+- [X] [Taylor] build new kernel
+- [ ] [Lucien] run new kernel on qemu
+- [X] [Taylor] concurrency exercise
+- [X] [Taylor] create document
+  - [X] log of commands
+  - [X] [Taylor] concurrency solution write up
+    - [X] main point of assignment
+    - [X] approach to problem
+    - [X] ensure correctness
+    - [X] what learn
+  - [X] [Taylor] explanation of qemu flags
+  - [X] [Taylor] version control log as table
+  - [X] [Taylor] work log
+- [X] [Taylor] submit by 2017-10-09 23:59:59
+  - [X] name file CS444_project1_37.tar.bz2
+  - [X] contents
+    - [X] concurrency C file
+    - [X] LaTeX writeup
+      - [X] LaTeX source
+      - [X] makefile
+      - [X] follow format guidelines
+  - [X] both names present in all submitted files
+  - [X] one member submits via TEACH
 \end{lstlisting}
+
+Taylor was the primary author of the Linux debugging and compilation, concurrency exercise implementation, and documentation and report components of the assignment.
 
 \subsection{Activity Log}
 
@@ -592,11 +634,53 @@ Work Log
 - Taylor to finish project, submit project, and notify Lucien
 \end{lstlisting}
 
+Taylor and Lucien collaborated asynchronously during the development period using email, shared documents, video conferences, version control, and face-to-face meetings.
+
 \subsection{Version Control Log}
 
+The following version control log documents commits made during development of the project.
+
 \begin{lstlisting}
-% TODO insert version control log
+$ git log --graph --oneline --decorate --all
+* 6ba55ed (HEAD, browtayl-dev) add todo list and version control log
+* 3ad8f9a add makefile to generate course archives
+* 4f776b4 continue report, implement makefile, and update todo list
+* 8c68ca6 initial report skeleton and content
+* 8377e1b update gitignore
+* c84f688 update documentation and import from google drive
+* 62d9a48 remove debug ifdef
+* 96428e0 (origin/browtayl-dev) document linux progress
+* 3de5baa (producer-consumer) reorganize project 1 source files
+* 64ac079 improve producer consumer implementation
+* 525a709 initial producer consumer implementation
+* 2e1c4c6 conditionally enable debug messages
+* 884040e implement multithreading
+* a7dda17 properly initialize mersenne twister
+* 95d9d74 ignore object files
+* 2af9b38 refactor concurrency source
+* fdee0c9 (origin/producer-consumer, origin/HEAD) get random integer between two numbers
+* 934d773 test mersenne twister
+* 7a02863 test rdrand
+* 26e87c1 create test assembly file
+*   eede428 Merge branch 'browtayl-dev' into producer-consumer
+|\  
+| * ac51163 add qemu kill script
+* | 5307213 concurrency skeleton
+|/  
+* b8adcda document qemu flags
+* 3767adb fix boot script errors
+* 567a8a1 create and document boot scripts
+* 54d26a7 mark todo item as done
+* 398605d (origin/master) create project1 directory
+* bb4de12 add connection instructions
+* 620c424 document cloning and rename initialization file
+* f4fc2c2 ignore emacs temporary files
+* 50b2341 document acl and git initialization
+* 8d955cc GNU GPLv2
+* 869e6e2 initial readme
 \end{lstlisting}
+
+All commits up to this point have been made by Taylor.
 
 \section{Conclusion}
 
