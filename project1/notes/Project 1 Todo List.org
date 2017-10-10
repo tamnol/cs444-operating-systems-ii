@@ -20,7 +20,7 @@ http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index
 - [ ] [Lucien] run new kernel on qemu
 - [X] [Taylor] concurrency exercise
 - [-] [Taylor] create document
-  - [ ] log of commands
+  - [X] log of commands
   - [X] [Taylor] concurrency solution write up
     - [X] main point of assignment
     - [X] approach to problem
@@ -29,13 +29,13 @@ http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index
   - [X] [Taylor] explanation of qemu flags
   - [ ] [Taylor] version control log as table
   - [ ] [Taylor] work log
-- [ ] [Taylor] submit by 2017-10-09 23:59:59
+- [-] [Taylor] submit by 2017-10-09 23:59:59
   - [ ] name file CS444_project1_37.tar.bz2
-  - [ ] contents
+  - [-] contents
     - [ ] concurrency C file
-    - [ ] LaTeX writeup
+    - [-] LaTeX writeup
       - [ ] LaTeX source
       - [ ] makefile
-      - [ ] follow format guidelines
+      - [X] follow format guidelines
   - [ ] both names present in all submitted files
   - [ ] one member submits via TEACH

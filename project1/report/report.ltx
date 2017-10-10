@@ -33,7 +33,7 @@
 
 \IEEEtitleabstractindextext{
   \begin{abstract}
-    This project comprised a review of QEMU, Linux compilation, thread synchronization, and x86\_64 assembly programming. A sample kernel was executed and debugged on a virtual machine, and then a new kernel was built and also executed on a virtual machine. In addition, a concurrency exercise implemented a solution to the producer-consumer problem using mutual exclusion for thread synchronization. This report documents the methodology and the implementation of the project.
+    This project comprised a review of QEMU, Linux compilation, thread synchronization, and \lstinline$x86_64$ assembly programming. A sample kernel was executed and debugged on a virtual machine, and then a new kernel was built and also executed on a virtual machine. In addition, a concurrency exercise implemented a solution to the producer-consumer problem using mutual exclusion for thread synchronization. This report documents the methodology and the implementation of the project.
   \end{abstract}
 }
 
@@ -52,8 +52,8 @@
 
 \section{Introduction}
 
-% TODO
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec hendrerit tempor tellus. Donec pretium posuere tellus. Proin quam nisl, tincidunt et, mattis eget, convallis nec, purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla posuere. Donec vitae dolor. Nullam tristique diam non turpis. Cras placerat accumsan nulla. Nullam rutrum. Nam vestibulum accumsan nisl.
+This project explored QEMU, Linux compilation, thread synchronization, and \lstinline$x86_64$ assembly programming. This report documents the project methodology and implementation.
+
 
 \section{Development Environment Configuration}
 
@@ -204,40 +204,402 @@ The directory \lstinline$/scratch/fall2017/37/cs444-operating-systems-ii$ serves
 
 \section{QEMU Usage}
 
-% TODO
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec hendrerit tempor tellus. Donec pretium posuere tellus. Proin quam nisl, tincidunt et, mattis eget, convallis nec, purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla posuere. Donec vitae dolor. Nullam tristique diam non turpis. Cras placerat accumsan nulla. Nullam rutrum. Nam vestibulum accumsan nisl.
+\subsection{Running and Debugging Linux}
+
+The first requirement for running and debugging Linux in QEMU is to source a shell configuration script which exports variables for development:
+
+\begin{lstlisting}
+bash-4.2$ source /scratch/files/environment-setup-i586-poky-linux
+\end{lstlisting}
+
+A boot script \lstinline$boot.bash$ was created containing the QEMU command line:
+
+\begin{lstlisting}
+#!/bin/bash
+#
+# Linux Boot Script
+#
+# Group 37: Taylor Alexander Brown & Lucien Armand Tamdja Tamno
+# Oregon State University
+# CS 444: Operating Systems II
+# Fall 2017
+#
+# Usage: ./boot.bash [/path/to/kernel.bin]
+
+# source the environment configuration script
+source /scratch/files/environment-setup-i586-poky-linux
+
+# run kernel in qemu
+qemu-system-i386 \
+    -gdb tcp::5537 \
+    -S \
+    -nographic \
+    -kernel $1 \
+    -drive file=/scratch/fall2017/37/disks/core-image-lsb-sdk-qemux86.ext4,if=virtio \
+    -enable-kvm \
+    -net none \
+    -usb \
+    -rtc base=localtime \
+    -no-reboot \
+    -append 'root=/dev/vda rw console=ttyS0 debug' \
+    &
+
+# boot kernel in gdb
+$GDB --command=boot.gdb
+\end{lstlisting}
+
+It was made executable with \lstinline$chmod ug+x boot.bash$. It calls the GDB command file \lstinline$boot.gdb$ to begin remote debugging:
+
+\begin{lstlisting}
+# Debugger Script to Connect GDB to QEMU
+#
+# Group 37: Taylor Alexander Brown & Lucien Armand Tamdja Tamno
+# Oregon State University
+# CS 444: Operating Systems II
+# Fall 2017
+#
+# Usage: (gdb) source debug.gdb
+
+# connect to QEMU
+target remote :5537
+
+# boot linux
+continue
+\end{lstlisting}
+
+It was possible to run and debug Linux on a QEMU virtual machine using these scripts. The sample kernel and filesystem were copied into the group directory:
+
+\begin{lstlisting}
+bash-4.2$ cd /scratch/fall2017/37/
+bash-4.2$ mkdir kernels
+bash-4.2$ mkdir disks
+bash-4.2$ cp /scratch/files/bzImage-qemux86.bin kernels/
+bash-4.2$ cp /scratch/files/core-image-lsb-sdk-qemux86.ext4 disks/
+\end{lstlisting}
+
+To run the kernel in QEMU and boot it in GDB, the boot script is executed given the path to the desired kernel:
+
+\begin{lstlisting}
+bash-4.2$ ./boot.bash /scratch/fall2017/37/kernels/bzImage-qemux86.bin
+\end{lstlisting}
+
+The sample kernel boots but hangs on login. Terminate the process with \lstinline$C-c$ and quit GDB with \lstinline$C-d$.
+
+\subsection{QEMU Flags}
+
+The following list of QEMU flags was taken directly from the help output:
+
+\begin{lstlisting}
+# List of QEMU Flags
+#
+# Taken directly from `qemu-system-i386 --help`.
+#
+# Group 37: Taylor Alexander Brown & Lucien Armand Tamdja Tamno
+# Oregon State University
+# CS 444: Operating Systems II
+# Fall 2017
+
+-gdb dev        wait for gdb connection on 'dev'
+-S              freeze CPU at startup (use 'c' to start execution)
+-nographic      disable graphical output and redirect serial I/Os to console
+-kernel bzImage use 'bzImage' as kernel image
+-drive [file=file][,if=type][,bus=n][,unit=m][,media=d][,index=i]
+       [,cyls=c,heads=h,secs=s[,trans=t]][,snapshot=on|off]
+       [,cache=writethrough|writeback|none|directsync|unsafe][,format=f]
+       [,serial=s][,addr=A][,rerror=ignore|stop|report]
+       [,werror=ignore|stop|report|enospc][,id=name][,aio=threads|native]
+       [,readonly=on|off][,copy-on-read=on|off]
+       [,discard=ignore|unmap][,detect-zeroes=on|off|unmap]
+       [[,bps=b]|[[,bps_rd=r][,bps_wr=w]]]
+       [[,iops=i]|[[,iops_rd=r][,iops_wr=w]]]
+       [[,bps_max=bm]|[[,bps_rd_max=rm][,bps_wr_max=wm]]]
+       [[,iops_max=im]|[[,iops_rd_max=irm][,iops_wr_max=iwm]]]
+       [[,iops_size=is]]
+                use 'file' as a drive image
+-enable-kvm     enable KVM full virtualization support
+-net none       use it alone to have zero network devices. If no -net option
+                is provided, the default is '-net nic -net user'
+-usb            enable the USB driver (will be the default soon)
+-rtc [base=utc|localtime|date][,clock=host|rt|vm][,driftfix=none|slew]
+                set the RTC base and clock, enable drift fix for clock ticks (x86 only)
+-no-reboot      exit instead of rebooting
+-append cmdline use 'cmdline' as kernel command line
+\end{lstlisting}
+
+These flags with the settings in \lstinline$boot.bash$ are used to successfully boot Linux for debugging on the virtual machine.
 
 \section{Linux Compilation}
 
-% TODO
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec hendrerit tempor tellus. Donec pretium posuere tellus. Proin quam nisl, tincidunt et, mattis eget, convallis nec, purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla posuere. Donec vitae dolor. Nullam tristique diam non turpis. Cras placerat accumsan nulla. Nullam rutrum. Nam vestibulum accumsan nisl.
+To compile Linux, change directory to root of the Linux source. Check out branch \lstinline$group37-dev$ which is based on tag \lstinline$v3.19.2$ and copy the provided configuration file and configure the kernel:
+
+\begin{lstlisting}
+bash-4.2$ source /scratch/files/environment-setup-i586-poky-linux
+bash-4.2$ cp /scratch/files/config-3.19.2-yocto-standard ./.config
+bash-4.2$ make -j4 TAGS
+  GEN     TAGS
+bash-4.2$ make menuconfig
+\end{lstlisting}
+
+Verify that 64-bit mode is disabled, and set General Settings/Local Version to \lstinline$-group37-project1$. Then begin compilation, preferably in a detached session of GNU SCREEN:
+
+\begin{lstlisting}
+bash-4.2$ make -j4 all
+\end{lstlisting}
+
+\section{Running Linux}
+
+To run the custom kernel, change to the \lstinline$cs444-operating-systems-ii$ repository and execute the boot script with the path of the Linux binary:
+
+\begin{lstlisting}
+bash-4.2$ ./boot.bash ../linux-yocto-3.19/arch/x86/boot/vmlinux.bin
+\end{lstlisting}
+
+The kernel immediately terminates after running in QEMU, so it was not possible to connect via GDB.
 
 \section{The Producer-Consumer Problem}
 
-% TODO
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec hendrerit tempor tellus. Donec pretium posuere tellus. Proin quam nisl, tincidunt et, mattis eget, convallis nec, purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla posuere. Donec vitae dolor. Nullam tristique diam non turpis. Cras placerat accumsan nulla. Nullam rutrum. Nam vestibulum accumsan nisl.
+The concurrency exercise implemented a solution to the producer-consumer problem. Mutual exclusion was used for thread synchronization, and hardware or software random number generators were used conditionally. The purpose of this assigment is to practice \lstinline$x86_64$ assembly language programming, concurrency, synchronization, and scheduling.
 
-\subsection{Random Number Generation}
+The approach to the problem was to:
 
-% TODO
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec hendrerit tempor tellus. Donec pretium posuere tellus. Proin quam nisl, tincidunt et, mattis eget, convallis nec, purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla posuere. Donec vitae dolor. Nullam tristique diam non turpis. Cras placerat accumsan nulla. Nullam rutrum. Nam vestibulum accumsan nisl.
+\begin{enumerate}
+\item use a test program to implement the conditional random number generator,
+\item outline a multithreaded program without shared memory, and then
+\item solve producer/consumer problem with shared memory.
+\end{enumerate}
 
-\subsection{Multithreading}
+Correctness was verified by executing on machines that do and don't support \lstinline$rdrand$ and by examining output logs of multiple producer and consumer threads. An example log demonstrates a typical execution:
 
-% TODO
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec hendrerit tempor tellus. Donec pretium posuere tellus. Proin quam nisl, tincidunt et, mattis eget, convallis nec, purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla posuere. Donec vitae dolor. Nullam tristique diam non turpis. Cras placerat accumsan nulla. Nullam rutrum. Nam vestibulum accumsan nisl.
+\begin{lstlisting}
+$ ./concurrency 
+main process 27017
+0x7f8901088700: consumer thread created
+0x7f8900837700: consumer thread created
+0x7f88fffe6700: consumer thread created
+0x7f88ff795700: consumer thread created
+0x7f89018d9700: consumer thread created
+0x7f890212a700: producer thread created
+0x7f890297b700: producer thread created
+0x7f89031cc700: producer thread created
+0x7f8903a1d700: producer thread created
+0x7f890426e700: producer thread created
+0x7f890212a700: produced 147413625 after 3 seconds
+0x7f890212a700: stored 147413625
+0x7f89031cc700: produced -441325338 after 3 seconds
+0x7f89031cc700: stored -441325338
+0x7f890297b700: produced -1244546621 after 5 seconds
+0x7f890297b700: stored -1244546621
+0x7f8903a1d700: produced -1652679206 after 6 seconds
+0x7f8903a1d700: stored -1652679206
+0x7f890426e700: produced 1298637652 after 7 seconds
+0x7f890212a700: produced -1334071706 after 4 seconds
+0x7f890426e700: stored 1298637652
+0x7f890212a700: stored -1334071706
+0x7f89031cc700: produced 677558004 after 6 seconds
+0x7f89031cc700: stored 677558004
+0x7f890297b700: produced 1087627342 after 5 seconds
+0x7f890297b700: stored 1087627342
+0x7f8900837700: consumed -441325338 after 8 seconds
+0x7f8901088700: consumed 147413625 after 8 seconds
+0x7f88ff795700: consumed 1298637652 after 4 seconds
+0x7f890426e700: produced -1613095943 after 5 seconds
+0x7f890426e700: stored -1613095943
+0x7f88fffe6700: consumed -1244546621 after 7 seconds
+0x7f8903a1d700: produced 35236426 after 7 seconds
+0x7f8903a1d700: stored 35236426
+0x7f89018d9700: consumed -1652679206 after 7 seconds
+0x7f890212a700: produced 721650640 after 7 seconds
+0x7f890212a700: stored 721650640
+0x7f89031cc700: produced -1938240608 after 6 seconds
+0x7f89031cc700: stored -1938240608
+0x7f89018d9700: consumed 35236426 after 2 seconds
+0x7f890297b700: produced -1044271828 after 6 seconds
+0x7f890297b700: stored -1044271828
+0x7f8903a1d700: produced 680751587 after 4 seconds
+0x7f8903a1d700: stored 680751587
+0x7f890212a700: produced 1965150606 after 4 seconds
+0x7f890212a700: stored 1965150606
+0x7f88fffe6700: consumed -1613095943 after 6 seconds
+0x7f890297b700: produced -1120407744 after 3 seconds
+0x7f890297b700: stored -1120407744
+0x7f8900837700: consumed 677558004 after 8 seconds
+0x7f890426e700: produced 11119425 after 7 seconds
+0x7f890426e700: stored 11119425
+0x7f88ff795700: consumed 1087627342 after 8 seconds
+0x7f89031cc700: produced -1490137272 after 5 seconds
+0x7f89031cc700: stored -1490137272
+0x7f89018d9700: consumed 721650640 after 5 seconds
+0x7f8901088700: consumed -1334071706 after 9 seconds
+^C
+\end{lstlisting}
 
-\subsection{Synchronization}
+Although threads avoid blocking others during wait periods, the algorithm used to search from the beginning of the buffer was not the most efficient use of multitasking.
 
-% TODO
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec hendrerit tempor tellus. Donec pretium posuere tellus. Proin quam nisl, tincidunt et, mattis eget, convallis nec, purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla posuere. Donec vitae dolor. Nullam tristique diam non turpis. Cras placerat accumsan nulla. Nullam rutrum. Nam vestibulum accumsan nisl.
+Skills learned and practiced in this exercise included \lstinline$x86_64$ assembly programming and the \lstinline$pthreads$ API.
+
+\section{Work Log}
+
+Group work was logged using a shared todo list and activity log and coordinated with the Git version control system.
+
+\subsection{Todo List}
+
+The todo list tracked each action item and by whom it was implemented:
+
+\begin{lstlisting}
+% TODO insert todo list
+\end{lstlisting}
+
+\subsection{Activity Log}
+
+The activity log tracked progress on the project including meetings and work:
+
+\begin{lstlisting}
+* Project 1 Activity Log
+
+Group 37: Taylor Alexander Brown & Lucien Armand Tamdja Tamno
+
+** 2017-10-01 15:00-16:50 T+L
+
+*** Meeting 1 Log
+
+- TODO [Lucien] How to connect remotely on the server (document commands)
+   - Summary: ssh to flip --> ssh to os2
+   - Addresses: 
+   - Commands:
+- TODO [Taylor] Root permission (contact Kevin)
+   - DONE [Taylor] emailed kevin and cc'd lucien
+   - TODO [Taylor] access root user
+- TODO [Taylor] Permissions from 777 (Exclude others from /scratch/fall2017/37)
+   - Wait until Taylor gets root
+   - Steps:
+      - Create new group
+      - Add Taylor and Lucien to group
+      - Change ownership of directory to group
+      - Remove non-group permissions
+- NOTE Development branch is group37-dev
+- PLAN Meet briefly face to face after lecture Tuesday
+
+** 2017-10-03 02:20-03:30 T
+
+*** Work Log
+
+- DONE [Taylor] Permissions from 777
+- [Taylor] Renamed old git repository for removal
+- TODO [Lucien] Help delete files with wrong permissions
+- DONE [Taylor] Setup and document ACL per /scratch/bin/acl_open
+- DONE [Taylor] Reclone the repo and document workflow
+- [Taylor] Everything described in /scratch/fall2017/37/cs444-operating-systems-ii/initialization.org
+  A plain text file in Emacs Org-mode format.
+
+** 2017-10-03 09:50-10:20 T+L
+
+*** Meeting 2 Log
+
+Spoke after class to touch bases on permissions and git setup.
+
+** 2017-10-04 09:30-11:00 L
+
+*** Work Log
+
+- Done [Lucien] description of commands how to access the os2 server via flip and vice versa include in
+/scratch/fall2017/37/cs444-lu-env connection.txt
+
+** 2017-10-04 1:30-2:00 L
+
+*** Work Log
+
+- DONE[Lucien] locate the 2 following files and provide the appropriate source as describe on the assignment
+   - /scratch/opt/environment-setup-i586-poky-linux.csh
+Because my shell is tcsh ( $shell )
+
+** 2017-10-04 3:30 L
+
+*** Work Log
+
+- Todo[Lucien]Building the qemu in the /37/cs444-lu-env/ as a test before implementation in our os-class env. 
+- DONE [Lucien] reorganization of files in the new branch (env-luc) created in /37/linux-yocto-3.19/
+2017-10-05 04:30-06:00 T
+Work Log
+- [Taylor] Reviewed changes on the server
+- [Taylor] Created shared Google Drive directory
+- [Taylor] Updated Activity Log
+- [Taylor] Added Todo List
+   - Note: to change a bullet point, double click on it, then right click, and choose icon
+2017-10-06 12:12 L
+Work Log
+   - [Lucien] fork branched on “group37-dev” and merge “ env-Luc” to get 3 required files.
+Question How to connect 
+
+** 2017-10-07 04:16-08:04 T
+
+*** Work Log
+
+- DONE [Taylor] study connection procedure
+- DONE [Lucien] delete /scratch/37
+- DONE [Taylor] create kernel boot script and documentation
+- DONE [Taylor] explanation of qemu flags
+- TODO [Taylor] begin concurrency exercise
+
+** 2017-10-07 13:30-17:15 T+L
+
+*** Work and Meeting 3 Log
+
+- TODO [Taylor] continue concurrency exercise
+- TODO [Taylor] outline documents
+- DONE [Taylor] create qemu kill script
+   - script kill-qemu.bash in browtayl-dev allows killing qemu
+- IN PROGRESS [Taylor,Lucien] building linux
+
+** 2017-10-07 23:00-01:30 T
+
+*** Work Log
+
+- TODO [Taylor] continue concurrency exercise
+   - DONE conditionally implement rdrand or mersenne twister
+   - DONE choose random integer between two values
+   - TODO implement multithreading
+   - NOTE in progress source in branch producer-consumer of repo file:///scratch/fall2017/37/cs444-operating-systems-ii
+
+** 2017-10-08 03:00-04:00 T
+
+*** Work Log
+
+- TODO [Taylor] continue concurrency exercise
+   - DONE refactor concurrency code
+   - TODO implement multithreading
+2017-10-08 19:00-23:30 T
+Work Log
+- DONE [Taylor] complete concurrency exercise
+- DONE [Taylor] reorganize documentation
+- NOTE [Taylor] my latest concurrency and documentation source is in branch browtayl-dev of repo file:///scratch/fall2017/37/cs444-operating-systems-ii
+- NOTE [Taylor] concurrency steps documented in project1/notes/concurrency.org in aforementioned branch
+- TODO [Taylor] test kernel build
+- TODO [Lucien] clone repository to home directory
+   - we could use GitHub if continued problems setting up repo
+
+** 2017-10-09 17:44-19:40 T+L
+
+*** Meeting Log
+
+- Taylor demonstrated concurrency implementation
+- Taylor to share C/Unix programming references
+- Little progress debugging Linux or building document, so Taylor taking on both
+
+** 2017-10-09 21:35-24:00 T
+
+*** Work Log
+
+- Taylor to finish project, submit project, and notify Lucien
+\end{lstlisting}
+
+\subsection{Version Control Log}
+
+\begin{lstlisting}
+% TODO insert version control log
+\end{lstlisting}
 
 \section{Conclusion}
 
-% TODO
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec hendrerit tempor tellus. Donec pretium posuere tellus. Proin quam nisl, tincidunt et, mattis eget, convallis nec, purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla posuere. Donec vitae dolor. Nullam tristique diam non turpis. Cras placerat accumsan nulla. Nullam rutrum. Nam vestibulum accumsan nisl.
-
-%\begin{thebibliography}{16}
-%\end{thebibliography}
+This project reviewed QEMU, Linux compilation, thread synchronization, and \lstinline$x86_64$ assembly programming. This report documented the project methodology and implementation.
 
 \end{document}
