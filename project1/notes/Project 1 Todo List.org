@@ -1,0 +1,41 @@
+* Project 1 Todo List
+
+Group 37: Taylor Alexander Brown & Lucien Armand Tamdja Tamno
+
+** Project 1 Links
+
+http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index.cgi?hw=1
+http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index.cgi?hw=synchro1
+
+** [7/10] Project 1 Requirements
+
+- [X] clone git://git.yoctoproject.org/linux-yocto-3.19
+- [X] checkout v3.19.2
+- [X] [Taylor] create repo in /scratch/fall2017/37
+  - [X] (clone central repos into home directory)
+- [X] source environment configuration script
+- [X] [Taylor] run sample kernel on qemu
+  - [X] [Taylor] (create a qemu shell script to automate this)
+- [X] [Taylor] build new kernel
+- [ ] [Lucien] run new kernel on qemu
+- [X] [Taylor] concurrency exercise
+- [-] [Taylor] create document
+  - [ ] log of commands
+  - [X] [Taylor] concurrency solution write up
+    - [X] main point of assignment
+    - [X] approach to problem
+    - [X] ensure correctness
+    - [X] what learn
+  - [X] [Taylor] explanation of qemu flags
+  - [ ] [Taylor] version control log as table
+  - [ ] [Taylor] work log
+- [ ] [Taylor] submit by 2017-10-09 23:59:59
+  - [ ] name file CS444_project1_37.tar.bz2
+  - [ ] contents
+    - [ ] concurrency C file
+    - [ ] LaTeX writeup
+      - [ ] LaTeX source
+      - [ ] makefile
+      - [ ] follow format guidelines
+  - [ ] both names present in all submitted files
+  - [ ] one member submits via TEACH

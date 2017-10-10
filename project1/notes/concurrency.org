@@ -138,6 +138,8 @@ main process 27017
 ^C
 #+END_SRC
 
+     note: search from start strategy leads to blockages
+
    - [X] what learn
 
      - assembly instructions

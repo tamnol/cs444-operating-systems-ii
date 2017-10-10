@@ -1,0 +1,136 @@
+* Project 1 Activity Log
+
+Group 37: Taylor Alexander Brown & Lucien Armand Tamdja Tamno
+
+** 2017-10-01 15:00-16:50 T+L
+
+*** Meeting 1 Log
+
+- TODO [Lucien] How to connect remotely on the server (document commands)
+   - Summary: ssh to flip --> ssh to os2
+   - Addresses: 
+   - Commands:
+- TODO [Taylor] Root permission (contact Kevin)
+   - DONE [Taylor] emailed kevin and cc'd lucien
+   - TODO [Taylor] access root user
+- TODO [Taylor] Permissions from 777 (Exclude others from /scratch/fall2017/37)
+   - Wait until Taylor gets root
+   - Steps:
+      - Create new group
+      - Add Taylor and Lucien to group
+      - Change ownership of directory to group
+      - Remove non-group permissions
+- NOTE Development branch is group37-dev
+- PLAN Meet briefly face to face after lecture Tuesday
+
+** 2017-10-03 02:20-03:30 T
+
+*** Work Log
+
+- DONE [Taylor] Permissions from 777
+- [Taylor] Renamed old git repository for removal
+- TODO [Lucien] Help delete files with wrong permissions
+- DONE [Taylor] Setup and document ACL per /scratch/bin/acl_open
+- DONE [Taylor] Reclone the repo and document workflow
+- [Taylor] Everything described in /scratch/fall2017/37/cs444-operating-systems-ii/initialization.org
+  A plain text file in Emacs Org-mode format.
+
+** 2017-10-03 09:50-10:20 T+L
+
+*** Meeting 2 Log
+
+Spoke after class to touch bases on permissions and git setup.
+
+** 2017-10-04 09:30-11:00 L
+
+*** Work Log
+
+- Done [Lucien] description of commands how to access the os2 server via flip and vice versa include in
+/scratch/fall2017/37/cs444-lu-env connection.txt
+
+** 2017-10-04 1:30-2:00 L
+
+*** Work Log
+
+- DONE[Lucien] locate the 2 following files and provide the appropriate source as describe on the assignment
+   - /scratch/opt/environment-setup-i586-poky-linux.csh
+Because my shell is tcsh ( $shell )
+
+** 2017-10-04 3:30 L
+
+*** Work Log
+
+- Todo[Lucien]Building the qemu in the /37/cs444-lu-env/ as a test before implementation in our os-class env. 
+- DONE [Lucien] reorganization of files in the new branch (env-luc) created in /37/linux-yocto-3.19/
+2017-10-05 04:30-06:00 T
+Work Log
+- [Taylor] Reviewed changes on the server
+- [Taylor] Created shared Google Drive directory
+- [Taylor] Updated Activity Log
+- [Taylor] Added Todo List
+   - Note: to change a bullet point, double click on it, then right click, and choose icon
+2017-10-06 12:12 L
+Work Log
+   - [Lucien] fork branched on “group37-dev” and merge “ env-Luc” to get 3 required files.
+Question How to connect 
+
+** 2017-10-07 04:16-08:04 T
+
+*** Work Log
+
+- DONE [Taylor] study connection procedure
+- DONE [Lucien] delete /scratch/37
+- DONE [Taylor] create kernel boot script and documentation
+- DONE [Taylor] explanation of qemu flags
+- TODO [Taylor] begin concurrency exercise
+
+** 2017-10-07 13:30-17:15 T+L
+
+*** Work and Meeting 3 Log
+
+- TODO [Taylor] continue concurrency exercise
+- TODO [Taylor] outline documents
+- DONE [Taylor] create qemu kill script
+   - script kill-qemu.bash in browtayl-dev allows killing qemu
+- IN PROGRESS [Taylor,Lucien] building linux
+
+** 2017-10-07 23:00-01:30 T
+
+*** Work Log
+
+- TODO [Taylor] continue concurrency exercise
+   - DONE conditionally implement rdrand or mersenne twister
+   - DONE choose random integer between two values
+   - TODO implement multithreading
+   - NOTE in progress source in branch producer-consumer of repo file:///scratch/fall2017/37/cs444-operating-systems-ii
+
+** 2017-10-08 03:00-04:00 T
+
+*** Work Log
+
+- TODO [Taylor] continue concurrency exercise
+   - DONE refactor concurrency code
+   - TODO implement multithreading
+2017-10-08 19:00-23:30 T
+Work Log
+- DONE [Taylor] complete concurrency exercise
+- DONE [Taylor] reorganize documentation
+- NOTE [Taylor] my latest concurrency and documentation source is in branch browtayl-dev of repo file:///scratch/fall2017/37/cs444-operating-systems-ii
+- NOTE [Taylor] concurrency steps documented in project1/notes/concurrency.org in aforementioned branch
+- TODO [Taylor] test kernel build
+- TODO [Lucien] clone repository to home directory
+   - we could use GitHub if continued problems setting up repo
+
+** 2017-10-09 17:44-19:40 T+L
+
+*** Meeting Log
+
+- Taylor demonstrated concurrency implementation
+- Taylor to share C/Unix programming references
+- Little progress debugging Linux or building document, so Taylor taking on both
+
+** 2017-10-09 21:35-24:00 T
+
+*** Work Log
+
+- Taylor to finish project, submit project, and notify Lucien
