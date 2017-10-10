@@ -44,9 +44,8 @@ int main(int argc, char **argv)
     /* create consumer threads */
     create_threads(CONSUMER_THREADS, consumer, consumer_start);
 
-    #ifdef DEBUG
+    /* print process id */
     printf("main process %d\n", getpid());
-    #endif
 
     /* exit main process while threads still running */
     pthread_exit(NULL);
