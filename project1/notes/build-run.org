@@ -41,7 +41,30 @@ bash-4.2$ ./boot.bash /scratch/fall2017/37/kernels/bzImage-qemux86.bin
 
 The kernel boots but hangs on login. Terminate the process with ~C-c~ and quit GDB with ~C-d~.
 
-** TODO Build New Kernel
+** DONE Build New Kernel
+
+Change directory to root of Linux source. Check out branch ~group37-dev~ which is based on tag ~v3.19.2~.
+
+#+BEGIN_SRC shell
+bash-4.2$ source /scratch/files/environment-setup-i586-poky-linux
+bash-4.2$ cp /scratch/files/config-3.19.2-yocto-standard ./.config
+bash-4.2$ make -j4 TAGS
+  GEN     TAGS
+bash-4.2$ make menuconfig
+#+END_SRC
+
+Verify that 64-bit mode is disabled, and set General Settings -> Local Version to ~-group37-project1~.
+
+#+BEGIN_SRC shell
+bash-4.2$ make -j4 all
+#+END_SRC
 
 ** TODO Run New Kernel on QEMU
 
+Change to the ~cs444-operating-systems-ii~ repository.
+
+#+BEGIN_SRC shell
+bash-4.2$ ./boot.bash ../linux-yocto-3.19/arch/x86/boot/vmlinux.bin
+#+END_SRC
+
+Kernel immediately terminates after running in QEMU, so it was not possible to connect via GDB.
