@@ -1,0 +1,225 @@
+* Set Default Shell
+
+To set ~/bin/bash~ as default shell on ~flip~ and ~os2~, append to ~.cshrc~ :
+
+#+BEGIN_SRC conf
+# change default shell                                                                                                
+setenv SHELL /bin/bash
+exec /bin/bash --login
+#+END_SRC
+
+To improve the command-line, append to ~.bashrc~ :
+
+#+BEGIN_SRC conf
+export PS1="\u@\h:\w$ "
+#+END_SRC
+
+* Connect From Off Campus
+
+To proxy SSH to access ~os2~ from off campus, on local machine append to ~.ssh/config~ :
+
+#+BEGIN_SRC conf
+Host os2.engr.oregonstate.edu
+ProxyCommand /usr/bin/ssh -W %h:%p username@flip.engr.oregonstate.edu
+#+END_SRC
+
+This will simplify interactive logins as well as enable git remote access. Connect as usual with:
+
+#+BEGIN_SRC shell
+$ ssh username@os2.engr.oregonstate.edu
+#+END_SRC
+
+* Use Bare Git for Centralized Repositories
+
+Currently the git repositories ~/scratch/fall2017/37/cs444-operating-systems-ii~ and ~/scratch/fall2017/37/linux-yocto-3.19~ are full repositories with working directories. Editing the working directory of the centralized repository makes it difficult to push and pull changes efficiently. Therefore I am creating a bare clone of the repositories to use as the central remote.
+
+** Git Repository and Branch Diagrams
+
+*** Repository Diagram
+
+Here is a diagram of our desired git repository structure in ~/scratch/fall2017/37/~ :
+
+#+BEGIN_SRC text
+                              cs444-operating-systems-ii.git
+                                        /    |    \
+                                       /     |     \
+                                      /      |      \
+                                     /       |       \
+    browtayl/cs444-operating-systems-ii/     |    tamnol/cs444-operating-systems-ii/
+                                             |
+                                             |
+                                             |
+                                             |
+                                       (local clones)
+
+
+                                    linux-yocto-3.19.git
+                                        /    |    \
+                                       /     |     \
+                                      /      |      \
+                                     /       |       \
+              browtayl/linux-yocto-3.19/     |    tamnol/linux-yocto-3.19/
+                                             |
+                                             |
+                                             |
+                                             |
+                                       (local clones)
+#+END_SRC
+
+*** Document Repository Branch Diagram
+
+Here is a diagram of our desired git branching workflow for ~cs444-operating-systems-ii.git~ :
+
+#+BEGIN_SRC text
+                                 --------
+                                /        \
+            ---- tamnol-dev --------------+-------------------------------------->
+           /                                    \
+master ---+--------------------------------------+-----------+------------------->
+           \                                      \         /
+            ---- browtayl-dev --------------+------+----------------------------->
+                                  \        /
+                                   --------
+#+END_SRC
+
+*** Linux Repository Branch Diagram
+
+Here is a diagram of our desired git branching workflow for ~linux-yocto-3.19.git~ :
+
+#+BEGIN_SRC text
+
+master ----+------------------------------------------------------------------->
+            \
+          v3.19.2
+              \
+               ---- group-37-dev ---------------------------------------------->
+                                    |\
+                                    | ---- project-2-dev ---+----------+------->
+                                    |                        \        /
+                                    |                         --------
+                                     \
+                                      ---- project-n-dev ---+------------------>
+                                                             \        /
+                                                              --------
+#+END_SRC
+
+** Create Bare Document Repository
+
+#+BEGIN_SRC shell
+browtayl@os2:/scratch/fall2017/37$ git clone --bare cs444-operating-systems-ii/ cs444-operating-systems-ii.git
+Cloning into bare repository 'cs444-operating-systems-ii.git'...
+done.
+browtayl@os2:/scratch/fall2017/37$ rm -rf cs444-operating-systems-ii/
+#+END_SRC
+
+** Create Bare Linux Repository
+
+Cloning Linux source once again to remove binary files :
+
+#+BEGIN_SRC shell
+browtayl@os2:/scratch/fall2017/37$ mv linux-yocto-3.19 linux-yocto-3.19-old
+browtayl@os2:/scratch/fall2017/37$ git clone --bare git://git.yoctoproject.org/linux-yocto-3.19 
+Cloning into bare repository 'linux-yocto-3.19.git'...
+remote: Counting objects: 3989315, done.
+remote: Compressing objects: 100% (597266/597266), done.
+Receiving objects: 100% (3989315/3989315), 842.73 MiB | 40.46 MiB/s, done.
+remote: Total 3989315 (delta 3357793), reused 3989307 (delta 3357785)
+Resolving deltas: 100% (3357793/3357793), done.
+#+END_SRC
+
+** Create User Working Directories
+
+#+BEGIN_SRC shell
+browtayl@os2:/scratch/fall2017/37$ mkdir browtayl
+browtayl@os2:/scratch/fall2017/37$ mkdir tamnol
+#+END_SRC
+
+** Clone Repositories into User Working Directories
+
+Here the repositories are cloned into the working directory for ~browtayl~ :
+
+#+BEGIN_SRC shell
+browtayl@os2:/scratch/fall2017/37$ cd browtayl
+browtayl@os2:/scratch/fall2017/37/browtayl$ git clone file:///scratch/fall2017/37/cs444-operating-systems-ii.git
+Cloning into 'cs444-operating-systems-ii'...
+remote: Counting objects: 171, done.
+remote: Compressing objects: 100% (165/165), done.
+remote: Total 171 (delta 89), reused 0 (delta 0)
+Receiving objects: 100% (171/171), 112.77 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (89/89), done.
+browtayl@os2:/scratch/fall2017/37/browtayl$ git clone file:///scratch/fall2017/37/linux-yocto-3.19.git
+Cloning into 'linux-yocto-3.19'...
+remote: Counting objects: 3989315, done.
+remote: Compressing objects: 100% (597258/597258), done.
+Receiving objects: 100% (3989315/3989315), 842.73 MiB | 38.71 MiB/s, done.
+remote: Total 3989315 (delta 3357793), reused 3989315 (delta 3357793)
+Resolving deltas: 100% (3357793/3357793), done.
+Checking out files: 100% (48440/48440), done.
+#+END_SRC
+
+** Create Branches
+
+The branch ~group-37-dev~ based off of tag ~v3.19.2~ will be the main development branch :
+
+#+BEGIN_SRC shell
+browtayl@os2:/scratch/fall2017/37/browtayl/linux-yocto-3.19$ cd linux-yocto-3.19/
+browtayl@os2:/scratch/fall2017/37/browtayl/linux-yocto-3.19$ git checkout v3.19.2
+Note: checking out 'v3.19.2'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b new_branch_name
+
+HEAD is now at 660613d... Linux 3.19.2
+browtayl@os2:/scratch/fall2017/37/browtayl/linux-yocto-3.19$ git checkout -b group-37-dev
+Switched to a new branch 'group-37-dev'
+browtayl@os2:/scratch/fall2017/37/browtayl/linux-yocto-3.19$ git push origin group-37-dev 
+Total 0 (delta 0), reused 0 (delta 0)
+To file:///scratch/fall2017/37/linux-yocto-3.19.git
+ * [new branch]      group-37-dev -> group-37-dev
+#+END_SRC
+
+User development branches ~browtayl-dev~ and ~tamnol-dev~ will contain individual work that has not yet been committed. Here Lucien's uncommitted Linux source file ~block/sstf-iosched.c~ is committed to his individual branch and pushed to the central repository, and then the old repository is removed :
+
+#+BEGIN_SRC shell
+browtayl@os2:/scratch/fall2017/37/browtayl/linux-yocto-3.19$ git checkout group-37-dev 
+Already on 'group-37-dev'
+browtayl@os2:/scratch/fall2017/37/browtayl/linux-yocto-3.19$ git checkout -b tamnol-dev
+Switched to a new branch 'tamnol-dev'
+browtayl@os2:/scratch/fall2017/37/browtayl/linux-yocto-3.19$ cp ../../linux-yocto-3.19-old/block/sstf-iosched.c block/
+browtayl@os2:/scratch/fall2017/37/browtayl/linux-yocto-3.19$ git status                                              
+# On branch tamnol-dev
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#       block/sstf-iosched.c
+nothing added to commit but untracked files present (use "git add" to track)
+browtayl@os2:/scratch/fall2017/37/browtayl/linux-yocto-3.19$ git add block/sstf-iosched.c
+browtayl@os2:/scratch/fall2017/37/browtayl/linux-yocto-3.19$ git commit -m "add lucien's initial block/sstf-iosched.c 
+skeleton"
+[tamnol-dev f5bedc4] add lucien's initial block/sstf-iosched.c skeleton
+ 1 file changed, 68 insertions(+)
+ create mode 100644 block/sstf-iosched.c
+browtayl@os2:/scratch/fall2017/37/browtayl/linux-yocto-3.19$ git push origin tamnol-dev 
+Counting objects: 6, done.
+Delta compression using up to 32 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 883 bytes | 0 bytes/s, done.
+Total 4 (delta 2), reused 0 (delta 0)
+To file:///scratch/fall2017/37/linux-yocto-3.19.git
+ * [new branch]      tamnol-dev -> tamnol-dev
+browtayl@os2:/scratch/fall2017/37/browtayl/linux-yocto-3.19$ rm -rf /scratch/fall2017/37/linux-yocto-3.19-old/
+#+END_SRC
+
+** Configure Remote Git Access
+
+Clone a local copy with ~git clone ssh://browtayl@os2.engr.oregonstate.edu/scratch/fall2017/37/cs444-operating-systems-ii.git~ or set the remote of an existing repository with ~git remote set-url origin ssh://browtayl@os2.engr.oregonstate.edu/scratch/fall2017/37/cs444-operating-systems-ii.git~ .
+
+** Collaborating
+
+All code should be committed in user clones and pushed to and pulled from the centralized repositories. Useful ~git~ commands include ~fetch~, ~pull~, ~checkout~, ~commit~, and ~push~.
