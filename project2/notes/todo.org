@@ -21,8 +21,11 @@ http://orgmode.org/manual/
 - If a task is unchecked and unassigned, it can and should be worked on.
 - Our document should indicate by whom each requirement was completed.
 - Changes to this file should be committed separately to ~master~ even if development branches are used.
+  - The first thing we should do during each development session is to ~git fetch origin~ and pull in any new changes.
 - See ~./collaboration.org~ for description of git workflow.
 - The version control log, work log, email, and meetings are the definitive means of collaboration.
+- A working implementation is more persuasive than a justification.
+- An inelegant implementation is better than no implementation.
 
 ** Project 2 Todo List
 
