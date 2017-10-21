@@ -1,24 +1,65 @@
-* Project 2 Todo List
+#+TITLE Project 2 Todo List
 
 Group 37: Taylor Alexander Brown & Lucien Armand Tamdja Tamno
 
 ** Project 2 Links
 
+*** Project Description
+
 http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index.cgi?hw=2
 
-** [1/6] Project 2 Requirements
+*** Org mode Documentation
+
+http://orgmode.org/
+http://orgmode.org/manual/
+
+** Collaboraton Notes
+
+- Amend this document as appropriate.
+- Discussion comments may be added within todo list items.
+- Indicate the task assignee in brackets, e.g., [Taylor] or [Lucien].
+- If a task is unchecked and unassigned, it can and should be worked on.
+- Our document should indicate by whom each requirement was completed.
+- Changes to this file should be committed separately to ~master~ even if development branches are used.
+- See ~./collaboration.org~ for description of git workflow.
+- The version control log, work log, email, and meetings are the definitive means of collaboration.
+
+** Project 2 Todo List
+
+*** [0/3] Project 1 Requirements Continued
+
+- [ ] successfully build and run kernel on qemu
+- [ ] improve document build process
+- [ ] determine how to format version control log as table
+
+*** [2/6] Project 2 Requirements
 
 - [X] [Taylor] setup linux sources
   - see ~configuration.org~
-- [ ] new file titled ~sstf-iosched.c~
-- [ ] works on qemu
-- [ ] implementation
+- [X] [Lucien] new file titled ~sstf-iosched.c~
+- [-] implementation
+  - [X] [Taylor] choose LOOK or CLOOK
+
+        Taylor: let's arbitrarily choose LOOK (/\/\/\)
+                instead of CLOOK (/|/|/|)
+
   - [ ] elevator algorithm
-  - [ ] choose LOOK or CLOOK
+  - [ ] research linux built-in data structures
+
+        Taylor: based on the description in class,
+                i believe we will need a doubly-linked list
+                not a fifo
+
   - [ ] sort
   - [ ] merge
   - [ ] change qemu options
+    - [ ] determine what options to change to implement I/O scheduler
+    - [ ] create qemu run script for this project
+      - [ ] move original run script into project1 directory
+- [ ] verify it works on qemu
 - [ ] write-up
+  - [ ] create document skeleton
+  - [ ] refactor document makefiles
   - [ ] The design you plan to use to implement the LOOK algorithms.
   - [ ] Your version control log.
   - [ ] A work log, detailing what you did when. Ideally, this is the same as the above.
@@ -34,3 +75,9 @@ http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index
     - [ ] A linux patch file containing your solution
     - [ ] The write-up in LaTeX format.
     - [ ] A makefile for the LaTeX file.
+  - [ ] follow format guidelines
+  - [ ] one member submit via TEACH
+
+*** [/] Concurrency Assignment
+
+- [ ] determine and track requirements and deadlines
