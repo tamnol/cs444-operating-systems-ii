@@ -7,6 +7,9 @@
  * Oregon State University
  * CS 444: Operating Systems II
  * Fall 2017
+ *
+ * Algorithm adapted from:
+ * https://www.cs.indiana.edu/classes/p415/hw/project/dining-philosophers/index.htm
  */
 
 #include <stdio.h>
@@ -28,19 +31,24 @@ typedef enum {
 /* philosopher threads */
 pthread_t philosopher[5];
 
-/* philosophers */
-char *lao_tzu    = "Lao Tzu",
-     *chuang_tzu  = "Chuang Tzu",
-     *confucius   = "Confucius",
-     *bodhidharma = "Bodhidharma",
-     *sun_tzu     = "Sun Tzu";
+/* philosopher names */
+char *name[5] = {"Lao Tzu", "Chuang Tzu", "Confucius", "Bodhidharma", "Sun Tzu" };
 
-/* chopstick i is between philosophers i-1 and i */
-pthread_mutex_t chopstick[5] = {PTHREAD_MUTEX_INITIALIZER,
-                                PTHREAD_MUTEX_INITIALIZER,
-                                PTHREAD_MUTEX_INITIALIZER,
-                                PTHREAD_MUTEX_INITIALIZER,
-                                PTHREAD_MUTEX_INITIALIZER}
+/* philosopher states */
+enum state {
+    THINKING,
+    EATING,
+    HUNGRY
+};
+
+/* mutual exclusion lock */
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+
+/* chopstick i is between philosophers i and i+1 */
+sem_t chopstick[5];
+
+/* philosopher state, initially THINKING */
+enum state philosopher_state[5] = { THINKING, THINKING, THINKING, THINKING, THINKING };
 
 /* random seed */
 int seedp;
@@ -59,14 +67,38 @@ void think(char *name)
     sleep(wait_time);
 }
 
-/**/
-void get_chopsticks();
+/* let philosopher i eat if waiting */
+void test(int i)
+{
+    if ((philosopher_state[i] == HUNGRY) &&
+        (philospher_state[ (i-1 < 0) ? 4 : i-1 ] != EAT) &&
+        (philospher_state[ i+1 % 5 ] != EAT)) {
+        philosopher_state[i] = EAT;
+        sem_post(chopstick[i]);
+    }
+}
 
-/**/
-void put_chopsticks();
+/* pick up chopsticks */
+void get_chopsticks(int i)
+{
+    pthread_mutex_lock(&lock);
+    philosopher_state[i] = HUNGRY;
+    test(i);
+    pthread_mutex_unlock(&lock);
+    sem_wait(chopstick[i]);
+}
+
+/* put down chopsticks */
+void put_chopsticks(int i)
+{
+    pthread_mutex_lock(&lock);
+    test( (i-1 < 0) ? 4 : i-1 );
+    test( i+1 % 5 );
+    pthread_mutex_unlock(&lock);
+}
 
 /* philosopher eating routine */
-void eat()
+void eat(char *name)
 {
     int wait_time = rand_between(2,9);
     printf("%s is eating for %d seconds\n", name, wait_time);
@@ -74,20 +106,23 @@ void eat()
 }
 
 /* philosopher loop */
-void *dine(void *name)
+void *dine(void *i)
 {
+    int index = (int) i;
+    char *name = name[i];
+
     loop {
         think(name);
-        get_chopsticks();
+        get_chopsticks(i);
         eat(name);
-        put_chopsticks();
+        put_chopsticks(i);
     }
 }
 
 /* create philosopher thread with index and name */
-void create_philosopher(int i, char *name)
+void create_philosopher(int i)
 {
-    status = pthread_create(&(philosopher[i]), NULL, dine, name);
+    status = pthread_create(&(philosopher[i]), NULL, dine, i);
     if (status != 0)
         exit(status);
 }
@@ -95,15 +130,18 @@ void create_philosopher(int i, char *name)
 /* main thread entry point */
 int main(int argc, char **argv)
 {
+    int i = 0;
+
     /* set random seed */
     seedp = time(NULL);
 
+    /* initialize chopstick semaphores to 0 */
+    for (i=0; i<5; ++i)
+        sem_init(&(chopstick[i]), 0, 0);
+
     /* create philosophers */
-    create_philosopher(0, lao_tzu);
-    create_philosopher(1, chuang_tzu);
-    create_philosopher(2, confucius);
-    create_philosopher(3, bodhidharma);
-    create_philosopher(4, sun_tzu);
+    for (i=0; i<5; ++i)
+        create_philosopher(i);
 
     /* exit main process while threads still running */
     pthread_exit(NULL);
