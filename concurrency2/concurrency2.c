@@ -60,10 +60,10 @@ int rand_between(int x, int y)
 }
 
 /* philosopher thinking routine */
-void think(char *name)
+void think(int i)
 {
     int wait_time = rand_between(2,9);
-    printf("%s is thinking for %d seconds\n", name, wait_time);
+    printf("%s is thinking for %d seconds\n", name[i], wait_time);
     sleep(wait_time);
 }
 
@@ -71,10 +71,10 @@ void think(char *name)
 void test(int i)
 {
     if ((philosopher_state[i] == HUNGRY) &&
-        (philospher_state[ (i-1 < 0) ? 4 : i-1 ] != EAT) &&
-        (philospher_state[ i+1 % 5 ] != EAT)) {
-        philosopher_state[i] = EAT;
-        sem_post(chopstick[i]);
+        (philosopher_state[ (i-1 < 0) ? 4 : i-1 ] != EATING) &&
+        (philosopher_state[ i+1 % 5 ] != EATING)) {
+        philosopher_state[i] = EATING;
+        sem_post(&chopstick[i]);
     }
 }
 
@@ -85,7 +85,7 @@ void get_chopsticks(int i)
     philosopher_state[i] = HUNGRY;
     test(i);
     pthread_mutex_unlock(&lock);
-    sem_wait(chopstick[i]);
+    sem_wait(&chopstick[i]);
 }
 
 /* put down chopsticks */
@@ -98,23 +98,22 @@ void put_chopsticks(int i)
 }
 
 /* philosopher eating routine */
-void eat(char *name)
+void eat(int i)
 {
     int wait_time = rand_between(2,9);
-    printf("%s is eating for %d seconds\n", name, wait_time);
-    sleep(rand_between(1,20);
+    printf("%s is eating for %d seconds\n", name[i], wait_time);
+    sleep(rand_between(1,20));
 }
 
 /* philosopher loop */
-void *dine(void *i)
+void *dine(void *index)
 {
-    int index = (int) i;
-    char *name = name[i];
+    int i = (int) index;
 
     loop {
-        think(name);
+        think(i);
         get_chopsticks(i);
-        eat(name);
+        eat(i);
         put_chopsticks(i);
     }
 }
@@ -122,7 +121,7 @@ void *dine(void *i)
 /* create philosopher thread with index and name */
 void create_philosopher(int i)
 {
-    status = pthread_create(&(philosopher[i]), NULL, dine, i);
+    int status = pthread_create(&(philosopher[i]), NULL, dine, (void *)i);
     if (status != 0)
         exit(status);
 }
