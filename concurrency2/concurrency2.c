@@ -94,6 +94,7 @@ void get_chopsticks(int i)
     test(i);
     pthread_mutex_unlock(&lock);
     sem_wait(&chopstick[i]);
+    printf("%s picks up chopsticks %d and %d\n", name[i], i, i+1%5);
 }
 
 /* put down chopsticks */
@@ -104,6 +105,7 @@ void put_chopsticks(int i)
     test( i+1 % 5 );
     philosopher_state[i] = THINKING;
     pthread_mutex_unlock(&lock);
+    printf("%s puts down chopsticks %d and %d\n", name[i], i, i+1%5);
 }
 
 /* philosopher eating routine */
