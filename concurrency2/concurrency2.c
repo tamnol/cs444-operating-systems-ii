@@ -10,6 +10,8 @@
  *
  * Algorithm adapted from:
  * https://www.cs.indiana.edu/classes/p415/hw/project/dining-philosophers/index.htm
+ * and
+ * The Little Book Of Semaphores
  */
 
 #include <stdio.h>
@@ -100,6 +102,7 @@ void put_chopsticks(int i)
     pthread_mutex_lock(&lock);
     test( (i-1 < 0) ? 4 : i-1 );
     test( i+1 % 5 );
+    philosopher_state[i] = THINKING;
     pthread_mutex_unlock(&lock);
 }
 
