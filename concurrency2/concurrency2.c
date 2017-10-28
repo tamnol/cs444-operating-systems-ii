@@ -32,7 +32,13 @@ typedef enum {
 pthread_t philosopher[5];
 
 /* philosopher names */
-char *name[5] = {"Lao Tzu", "Chuang Tzu", "Confucius", "Bodhidharma", "Sun Tzu" };
+char *name[5] = {
+    "Lao Tzu",
+    "Chuang Tzu",
+    "Confucius",
+    "Bodhidharma",
+    "Sun Tzu"
+};
 
 /* philosopher states */
 enum state {
