@@ -60,9 +60,9 @@ http://orgmode.org/manual/
     - [ ] create qemu run script for this project
       - [ ] move original run script into project1 directory
 - [ ] verify it works on qemu
-- [ ] write-up
-  - [ ] create document skeleton
-  - [ ] refactor document makefiles
+- [-] write-up
+  - [X] [Taylor] create document skeleton
+  - [X] [Taylor] refactor document makefiles
   - [ ] The design you plan to use to implement the LOOK algorithms.
   - [ ] Your version control log.
   - [ ] A work log, detailing what you did when. Ideally, this is the same as the above.
@@ -72,15 +72,11 @@ http://orgmode.org/manual/
     - [ ] How did you ensure your solution was correct? Testing details, for instance.
     - [ ] What did you learn?
     - [ ] How should the TA evaluate your work? Provide detailed steps to prove correctness.
-- [ ] submission
-  - [ ] named ~CS444_project2_37.tar.bz2~
-  - [ ] include
+- [-] submission
+  - [X] [Taylor] named ~CS444_project2_37.tar.bz2~
+  - [-] include
     - [ ] A linux patch file containing your solution
-    - [ ] The write-up in LaTeX format.
-    - [ ] A makefile for the LaTeX file.
+    - [X] [Taylor] The write-up in LaTeX format.
+    - [X] [Taylor] A makefile for the LaTeX file.
   - [ ] follow format guidelines
   - [ ] one member submit via TEACH
-
-*** [/] Concurrency Assignment
-
-- [ ] determine and track requirements and deadlines
