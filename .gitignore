@@ -9,3 +9,7 @@
 *.log
 *.pdf
 *.toc
+
+# Archives
+*.tar.bz2
+*.tgz
