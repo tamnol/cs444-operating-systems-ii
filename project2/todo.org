@@ -29,10 +29,10 @@ http://orgmode.org/manual/
 
 ** Project 2 Todo List
 
-*** [0/3] Project 1 Requirements Continued
+*** [1/3] Project 1 Requirements Continued
 
 - [ ] successfully build and run kernel on qemu
-- [ ] improve document build process
+- [X] [Taylor] improve document build process
 - [ ] determine how to format version control log as table
 
 *** [2/6] Project 2 Requirements
@@ -47,7 +47,7 @@ http://orgmode.org/manual/
                 instead of CLOOK (/|/|/|)
 
   - [ ] elevator algorithm
-  - [ ] research linux built-in data structures
+  - [X] [Taylor] research linux built-in data structures
 
         Taylor: based on the description in class,
                 i believe we will need a doubly-linked list
