@@ -13,6 +13,12 @@ http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index
 http://orgmode.org/
 http://orgmode.org/manual/
 
+*** Resources
+
+https://en.wikipedia.org/wiki/LOOK_algorithm
+http://courses.teresco.org/cs432_f02/lectures/17-files/17-files.html
+https://hzliu123.github.io/linux-kernel/Linux%20IO%20Schedulers.pdf
+
 ** Collaboraton Notes
 
 - Amend this document as appropriate.
@@ -53,8 +59,14 @@ http://orgmode.org/manual/
                 i believe we will need a doubly-linked list
                 not a fifo
 
+        Taylor: see include/linux/list.h
+                and include/linux/list_sort.h
+
   - [ ] sort
   - [ ] merge
+
+        Taylor: back-merge
+
   - [ ] change qemu options
     - [ ] determine what options to change to implement I/O scheduler
     - [ ] create qemu run script for this project
