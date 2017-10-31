@@ -47,21 +47,27 @@ http://orgmode.org/manual/
                 instead of CLOOK (/|/|/|)
 
   - [ ] elevator algorithm
-  - [ ] research linux built-in data structures
+  - [Lucien] research linux built-in data structures
+        Doubly linked list build in kernel
+        https://0xax.gitbooks.io/linux-insides/content/DataStructures/dlist.html
+        https://github.com/torvalds/linux/blob/16f73eb02d7e1765ccab3d2018e0bd98eb93d973/include/linux/list.h
 
         Taylor: based on the description in class,
                 i believe we will need a doubly-linked list
                 not a fifo
 
-  - [ ] sort
-  - [ ] merge
+  - [Lucien] sort
+  - [Lucien] merge
   - [ ] change qemu options
     - [ ] determine what options to change to implement I/O scheduler
     - [ ] create qemu run script for this project
       - [ ] move original run script into project1 directory
 - [ ] verify it works on qemu
 - [ ] write-up
-  - [ ] create document skeleton
+  - [ Lucien] create document skeleton
+        creating a .tex file to answer following questions
+        
+        
   - [ ] refactor document makefiles
   - [ ] The design you plan to use to implement the LOOK algorithms.
   - [ ] Your version control log.
