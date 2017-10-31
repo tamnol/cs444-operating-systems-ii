@@ -1,0 +1,92 @@
+% Project 2: I/O Elevators
+%
+% Assignment: http://web.engr.oregonstate.edu/cgi-bin/cgiwrap/dmcgrath/classes/17F/cs444/index.cgi?hw=2
+%
+% File: project2.tex
+%
+% Group 37: Taylor Alexander Brown & Lucien Armand Tamdja Tamno
+% Oregon State University
+% CS 444: Operating Systems II
+% Fall 2017
+
+\documentclass[10pt,draftclsnofoot,onecolumn,journal,compsoc]{IEEEtran}
+% for IEEEtran usage, see http://www.texdoc.net/texmf-dist/doc/latex/IEEEtran/IEEEtran_HOWTO.pdf
+
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1em}
+
+\usepackage[margin=0.75in]{geometry}
+\usepackage{listings}
+\usepackage{}
+
+\lstset {
+  basicstyle=\small\ttfamily,
+%  numbers=left,
+  numberstyle=\scriptsize,
+  showspaces=false,
+  showstringspaces=false,
+  breaklines=true
+}
+
+\title{Project 2: I/O Elevators}
+\author{
+  \IEEEauthorblockN{Taylor Alexander Brown and Lucien Armand Tamdja Tamno} \\
+  \IEEEauthorblockA{CS 444: Operating Systems II \\ Oregon State University}
+}
+\date{October 30, 2017}
+
+\IEEEtitleabstractindextext{
+  \begin{abstract}
+  this document describes various unto how the elevator algorithm is implmented to reduce the response time on how requests can be schedule.
+
+  \end{abstract}
+}
+
+\begin{document}
+
+\maketitle
+\IEEEdisplaynontitleabstractindextext
+\IEEEpeerreviewmaketitle
+\vfill
+
+\newpage
+\begin{enumerate}
+ 
+\item {What do you think the main point of this assignment is?}
+\par 
+the main point of this assignment is to show how using the elevator algorithm shaped and helped to write the disk scheduling algorithm, which is
+to define the disk's arm and head motion as requests to read and write data. in addition, this elevator algorithm based on doubly linked list was
+the better version than the FCFS algorithm. \par
+
+\item{ How did you personally approach the problem? Design decisions, algorithm, etc}
+\par
+As a members of the group 37, we appraoched the problem as followed:
+
+	\begin{itemized}
+
+		\item the first step was to go nearby elevator and see how it works as people use it
+		\item the next step was to research and read an example of Look-and C-Look algorithm
+		  and then try to compare it with how elevator works.
+		And the findings made out the Look-Algorithm led us to SStf (or shortest seek time first). And that was a thread that
+		led us the elevator alogrithm sample and the focus point on how the i/o disk sheduling algorithm was implemented 
+		and with the disk scheduling being a substantial gained time algorithm that fits the best the  disk's arm and head,
+		 for various requests read and write.
+		 \item the final piece being to seek the impementation in linux version.
+
+	\end{itemized}
+
+
+	
+\end{enumerate}
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+
+
+
+\section{Conclusion}
+
+
+\end{document}
